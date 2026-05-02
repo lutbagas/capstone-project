@@ -1,65 +1,101 @@
-import Image from "next/image";
+import "./globals.css";
 
-export default function Home() {
+type Developer = {
+  title: string;
+  price: string;
+};
+
+function Navbar() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <nav className="navbar">
+      <div className="logo">DevConnect</div>
+
+      <ul className="nav-links">
+        <span>Home</span>
+        <span>About</span>
+        <span>Services</span>
+        <span>Contact</span>
+      </ul>
+
+      <div>
+        <button className="btn-outline">Login</button>
+        <button className="btn">Register</button>
+      </div>
+    </nav>
+  );
+}
+
+function Hero() {
+  return (
+    <div className="hero">
+      <h1>
+        Find the Best Web <br />
+        Developers for Your <br />
+        Project
+      </h1>
+
+      <div className="hero-banner"></div>
     </div>
   );
 }
+
+type DeveloperCardProps = {
+  data: Developer;
+};
+
+function DeveloperCard({ data }: DeveloperCardProps) {
+  return (
+    <div className="card">
+      <div className="image-placeholder"></div>
+      <h4>{data.title}</h4>
+      <p>{data.price}</p>
+    </div>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="footer">
+      <h3>DevConnect</h3>
+
+      <div className="footer-columns">
+        <div>Menu</div>
+        <div>Services</div>
+        <div>Contact</div>
+      </div>
+    </footer>
+  );
+}
+
+function App() {
+  const developers: Developer[] = [
+    { title: "Jhon Doe", price: "$75/hr" },
+    { title: "Robert Johnson", price: "$60/hr" },
+    { title: "Sarah Williams", price: "$65/hr" },
+    { title: "Michael Brown", price: "$70/hr" },
+    { title: "Emily Davis", price: "$65/hr" },
+    { title: "David Wilson", price: "$60/hr" },
+    { title: "Lisa Anderson", price: "$75/hr" },
+    { title: "Alex Turner", price: "$55/hr" },
+    { title: "Jennifer Lee", price: "$80/hr" },
+  ];
+
+  return (
+    <div>
+      <Navbar />
+      <Hero />
+
+      <div className="container">
+        <div className="grid">
+          {developers.map((dev, index) => (
+            <DeveloperCard key={index} data={dev} />
+          ))}
+        </div>
+      </div>
+
+      <Footer />
+    </div>
+  );
+}
+
+export default App;
