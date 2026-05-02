@@ -4,10 +4,79 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  idusers    Int      @id @default(autoincrement())
+  name       String   @db.VarChar(100)
+  email      String   @unique @db.VarChar(100)
+  passwd     String   @db.VarChar(255)
+  role       Role
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  freelancer_profiles freelancer_profiles[]
+  client_profiles     client_profiles[]
+}
+
+model freelancer_profiles {
+  idfreelance Int    @id @default(autoincrement())
+  users_idusers Int
+  title        String? @db.VarChar(100)
+  bio          String?
+  skills       String?
+  phone        String? @db.VarChar(20)
+  profile_visibility Visibility
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  users users @relation(fields: [users_idusers], references: [idusers], onDelete: Cascade)
+
+  portfolios portfolios[]
+}
+
+model client_profiles {
+  idclient Int @id @default(autoincrement())
+  users_idusers Int
+  idusers  BigInt?   // mengikuti DB kamu (meskipun redundant)
+  company_name String? @db.VarChar(100)
+  description  String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  users users @relation(fields: [users_idusers], references: [idusers], onDelete: Cascade)
+}
+
+model portfolios {
+  idportfolios Int @id @default(autoincrement())
+  freelancer_profiles_idfreelance Int
+  project_title String @db.VarChar(150)
+  project_description String?
+  project_link String? @db.VarChar(255)
+  image String? @db.VarChar(255)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  freelancer_profiles freelancer_profiles @relation(
+    fields: [freelancer_profiles_idfreelance],
+    references: [idfreelance],
+    onDelete: Cascade
+  )
+}
+
+enum Role {
+  admin
+  freelancer
+  client
+}
+
+enum Visibility {
+  public
+  limited
 }
