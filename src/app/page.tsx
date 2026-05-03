@@ -11,7 +11,7 @@ function Navbar() {
       <div className="logo">DevConnect</div>
 
       <ul className="nav-links">
-        <span>Home</span>
+        <span className="bg-blue-300">Home</span>
         <span>About</span>
         <span>Services</span>
         <span>Contact</span>
