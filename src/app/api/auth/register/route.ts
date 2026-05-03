@@ -1,72 +1,39 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import { RegisterBody } from "@/types/auth";
 
 export async function POST(req: Request) {
   try {
-    const body: RegisterBody = await req.json();
-    const { name, email, password, role } = body;
-
-    // validasi
-    if (!name || !email || !password || !role) {
-      return NextResponse.json(
-        { error: "Semua field wajib diisi" },
-        { status: 400 }
-      );
-    }
+    const { name, email, password, role } = await req.json();
 
     // cek email
-    const existingUser = await prisma.users.findUnique({
+    const existingUser = await prisma.user.findUnique({
       where: { email },
     });
 
     if (existingUser) {
       return NextResponse.json(
-        { error: "Email sudah digunakan" },
+        { error: "Email already used" },
         { status: 400 }
       );
     }
 
     // hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashed = await bcrypt.hash(password, 10);
 
     // create user
-    const user = await prisma.users.create({
+    const user = await prisma.user.create({
       data: {
         name,
         email,
-        passwd: hashedPassword,
+        passwd: hashed,
         role,
       },
     });
 
-    // create profile sesuai role
-    if (role === "freelancer") {
-      await prisma.freelancer_profiles.create({
-        data: {
-          users_idusers: user.idusers,
-          profile_visibility: "public",
-        },
-      });
-    }
-
-    if (role === "client") {
-      await prisma.client_profiles.create({
-        data: {
-          users_idusers: user.idusers,
-        },
-      });
-    }
-
     return NextResponse.json({
-      message: "Register berhasil",
-      user: {
-        id: user.idusers,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
+      message: "User created",
+      user,
     });
   } catch (error) {
     console.error(error);

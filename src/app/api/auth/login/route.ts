@@ -9,8 +9,16 @@ export async function POST(req: Request) {
     const body: LoginBody = await req.json();
     const { email, password } = body;
 
-    // cari user
-    const user = await prisma.users.findUnique({
+    // cek input
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: "Email dan password wajib diisi" },
+        { status: 400 }
+      );
+    }
+
+    // ✅ FIX: prisma.user (bukan users)
+    const user = await prisma.user.findUnique({
       where: { email },
     });
 
@@ -31,13 +39,18 @@ export async function POST(req: Request) {
       );
     }
 
-    // generate JWT
+    // cek JWT secret
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET belum diset di .env");
+    }
+
+    // ✅ FIX: id pakai user.id (bukan idusers)
     const token = jwt.sign(
       {
-        id: user.idusers,
+        id: user.id,
         role: user.role,
       },
-      process.env.JWT_SECRET as string,
+      process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
 
@@ -45,7 +58,7 @@ export async function POST(req: Request) {
       message: "Login berhasil",
       token,
       user: {
-        id: user.idusers,
+        id: user.id,
         name: user.name,
         email: user.email,
         role: user.role,

@@ -1,4 +1,5 @@
 import "./globals.css";
+import Link from "next/link";
 
 type Developer = {
   title: string;
@@ -28,13 +29,17 @@ function Navbar() {
       </ul>
 
       <div className="flex items-center">
-        <button className="cursor-pointer rounded-full border border-indigo-600 px-4 py-2 text-sm font-medium text-indigo-600 transition-all duration-300 hover:bg-indigo-600 hover:text-white">
-          Login
-        </button>
+        <Link href="/login">
+          <button className="cursor-pointer rounded-full border border-indigo-600 px-4 py-2 text-sm font-medium text-indigo-600 transition-all duration-300 hover:bg-indigo-600 hover:text-white">
+            Login
+          </button>
+        </Link>
 
-        <button className="ml-2.5 cursor-pointer rounded-full border border-indigo-600 bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-white hover:text-indigo-600">
-          Register
-        </button>
+        <Link href="/register">
+          <button className="ml-2.5 cursor-pointer rounded-full border border-indigo-600 bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-white hover:text-indigo-600">
+            Register
+          </button>
+        </Link>
       </div>
     </nav>
   );
