@@ -63,7 +63,7 @@ export default function FreelancerDashboard() {
     <main className="min-h-screen bg-slate-50 p-6">
       {/* HEADER */}
       <section className="mx-auto max-w-7xl">
-        <div className="overflow-hidden rounded-[30px] bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 p-8 text-white shadow-xl">
+        <div className="overflow-hidden rounded-[30px] bg-linear-to-r from-indigo-600 via-violet-600 to-purple-600 p-8 text-white shadow-xl">
           <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
             <div className="flex items-center gap-5">
               <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white/20 backdrop-blur-md">
