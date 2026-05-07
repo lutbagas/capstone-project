@@ -54,7 +54,7 @@ export default function AuthForm({ type }: Props) {
       // 🔐 LOGIN SUCCESS
       if (type === "login" && data.token) {
         localStorage.setItem("token", data.token);
-        router.push("/"); // 👉 ke homepage
+        router.push(`/freelancers/${data.user.id}`); // 👉 ke homepage
       }
 
       // 🆕 REGISTER SUCCESS
