@@ -51,7 +51,7 @@ export async function PATCH(req: Request, { params }: Props) {
       profile,
     });
   } catch (error) {
-    console.error(error);
+    console.error("UPDATE FREELANCER PROFILE ERROR:", error);
 
     return NextResponse.json(
       { error: "Gagal update profile" },
