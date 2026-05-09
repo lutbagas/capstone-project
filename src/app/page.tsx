@@ -107,21 +107,85 @@ function DeveloperCard({ data }: DeveloperCardProps) {
 
 function Footer() {
   return (
-    <footer className="mt-10 bg-white px-10 py-8 font-serif text-slate-950 shadow-[0_-10px_30px_rgba(79,70,229,0.06)]">
+    <footer className="mt-16 bg-white px-10 py-10 font-serif text-slate-950 shadow-[0_-10px_30px_rgba(79,70,229,0.06)]">
       <div className="mx-auto max-w-275">
-        <h3 className="text-2xl font-bold text-indigo-700">
-          DevConnect
-        </h3>
+        <div className="grid grid-cols-4 gap-10">
+          <div>
+            <h3 className="text-3xl font-bold text-indigo-700">
+              DevConnect
+            </h3>
 
-        <div className="mt-6 flex justify-around rounded-2xl border border-indigo-100 bg-indigo-50 px-6 py-5 text-slate-600">
-          <div className="cursor-pointer transition hover:text-indigo-700">
-            Menu
+            <p className="mt-4 text-sm leading-relaxed text-slate-500">
+              Platform untuk menghubungkan client dengan freelance web developer
+              profesional secara cepat, mudah, dan terpercaya.
+            </p>
           </div>
-          <div className="cursor-pointer transition hover:text-indigo-700">
-            Services
+
+          <div>
+            <h4 className="mb-4 text-lg font-semibold text-slate-900">
+              Menu
+            </h4>
+
+            <ul className="space-y-3 text-sm text-slate-500">
+              <li className="cursor-pointer transition hover:text-indigo-700">
+                Home
+              </li>
+              <li className="cursor-pointer transition hover:text-indigo-700">
+                About
+              </li>
+              <li className="cursor-pointer transition hover:text-indigo-700">
+                Services
+              </li>
+              <li className="cursor-pointer transition hover:text-indigo-700">
+                Contact
+              </li>
+            </ul>
           </div>
-          <div className="cursor-pointer transition hover:text-indigo-700">
-            Contact
+
+          <div>
+            <h4 className="mb-4 text-lg font-semibold text-slate-900">
+              Services
+            </h4>
+
+            <ul className="space-y-3 text-sm text-slate-500">
+              <li className="cursor-pointer transition hover:text-indigo-700">
+                Web Development
+              </li>
+              <li className="cursor-pointer transition hover:text-indigo-700">
+                UI/UX Design
+              </li>
+              <li className="cursor-pointer transition hover:text-indigo-700">
+                Frontend Developer
+              </li>
+              <li className="cursor-pointer transition hover:text-indigo-700">
+                Backend Developer
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="mb-4 text-lg font-semibold text-slate-900">
+              Contact
+            </h4>
+
+            <ul className="space-y-3 text-sm text-slate-500">
+              <li>Email: devconnect@email.com</li>
+              <li>Location: Jakarta, Indonesia</li>
+              <li>Phone: +62 812 3456 7890</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-10 flex items-center justify-between border-t border-slate-200 pt-6 text-sm text-slate-500">
+          <p>© 2026 DevConnect. All rights reserved.</p>
+
+          <div className="flex gap-5">
+            <span className="cursor-pointer transition hover:text-indigo-700">
+              Privacy Policy
+            </span>
+            <span className="cursor-pointer transition hover:text-indigo-700">
+              Terms
+            </span>
           </div>
         </div>
       </div>
