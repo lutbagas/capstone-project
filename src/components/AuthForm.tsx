@@ -54,7 +54,22 @@ export default function AuthForm({ type }: Props) {
       // 🔐 LOGIN SUCCESS
       if (type === "login" && data.token) {
         localStorage.setItem("token", data.token);
-        router.push(`/freelancers/${data.user.id}`); // 👉 ke homepage
+
+        // redirect berdasarkan role
+        if (data.user.role === "client") {
+          router.push("/clients");
+          return;
+        }
+
+        if (data.user.role === "freelancer") {
+          router.push(`/freelancers/${data.user.id}`);
+          return;
+        }
+
+        if (data.user.role === "admin") {
+          router.push("/admin");
+          return;
+        }
       }
 
       // 🆕 REGISTER SUCCESS
