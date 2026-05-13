@@ -9,7 +9,7 @@ type Props = {
   }>;
 };
 
-export default async function FreelancerProfileForClientPage({ params }: Props) {
+export default async function FreelancerPublicProfilePage({ params }: Props) {
   const { id } = await params;
   const freelancerId = Number(id);
 
@@ -18,7 +18,9 @@ export default async function FreelancerProfileForClientPage({ params }: Props) 
   }
 
   const client = await prisma.user.findFirst({
-    where: { role: "client" },
+    where: {
+      role: "client",
+    },
   });
 
   const freelancer = await prisma.user.findFirst({
@@ -43,98 +45,164 @@ export default async function FreelancerProfileForClientPage({ params }: Props) 
     notFound();
   }
 
-  const skills = (freelancer.freelancerProfile.skills || "")
+  const profile = freelancer.freelancerProfile;
+
+  const skills = (profile.skills || "")
     .split(",")
-    .map((skill: string) => skill.trim())
+    .map((skill) => skill.trim())
     .filter(Boolean);
 
   return (
-    <main className="min-h-screen bg-[#F5F7FB]">
-      {client && <ClientNavbar userName={client.name || "Client"} userId={client.id} />}
+    <main className="min-h-screen bg-slate-50">
+      {client && (
+        <ClientNavbar
+          userName={client.name || "Client"}
+          userId={client.id}
+        />
+      )}
 
-      <section className="mx-auto max-w-275 px-10 py-14">
-        <div className="overflow-hidden rounded-4xl border border-indigo-100 bg-white shadow-[0_20px_60px_rgba(79,70,229,0.12)]">
-          <div className="h-55 bg-grbg-linear-to-r-indigo-700 via-indigo-500 to-blue-500" />
+      <section className="mx-auto max-w-7xl px-6 py-10">
+        <div className="overflow-hidden rounded-[30px] bg-white shadow-xl">
+          <div className="bg-linear-to-r from-indigo-600 via-violet-600 to-purple-600 px-8 py-12 text-white">
+            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+              <div className="flex items-center gap-5">
+                <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white/40 bg-white/20 text-4xl font-bold backdrop-blur-md">
+                  {freelancer.name?.charAt(0) || "F"}
+                </div>
 
-          <div className="relative px-10 pb-10">
-            <div className="-mt-16 flex h-32 w-32 items-center justify-center rounded-full border-8 border-white bg-indigo-600 text-5xl font-bold text-white shadow-xl">
-              {freelancer.name?.charAt(0) || "F"}
+                <div>
+                  <p className="text-sm text-indigo-100">Freelancer Profile</p>
+
+                  <h1 className="mt-1 text-4xl font-bold">
+                    {freelancer.name || "Freelancer"}
+                  </h1>
+
+                  <p className="mt-2 text-lg text-indigo-100">
+                    {profile.title || "Professional Freelancer"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-medium capitalize backdrop-blur-md">
+                {profile.visibility}
+              </div>
             </div>
 
-            <h1 className="mt-4 font-serif text-5xl font-bold text-slate-900">{freelancer.name || "Freelancer"}</h1>
-            <p className="mt-2 text-xl text-slate-500">
-              {freelancer.freelancerProfile.title || "Professional Freelancer"}
+            <p className="mt-8 max-w-3xl text-indigo-50">
+              {profile.bio || "Freelancer ini belum menambahkan bio."}
             </p>
 
-            <div className="mt-8 grid grid-cols-3 gap-5">
-              <div className="rounded-2xl bg-slate-50 p-6">
-                <p className="text-sm text-slate-500">Email</p>
-                <h3 className="mt-2 text-lg font-semibold text-slate-900">{freelancer.email}</h3>
-              </div>
-
-              <div className="rounded-2xl bg-slate-50 p-6">
-                <p className="text-sm text-slate-500">Phone</p>
-                <h3 className="mt-2 text-lg font-semibold text-slate-900">{freelancer.freelancerProfile.phone || "-"}</h3>
-              </div>
-
-              <div className="rounded-2xl bg-slate-50 p-6">
-                <p className="text-sm text-slate-500">Portfolio</p>
-                <h3 className="mt-2 text-lg font-semibold text-slate-900">
-                  {freelancer.freelancerProfile.portfolios.length} Projects
-                </h3>
-              </div>
-            </div>
-
-            <div className="mt-10 rounded-3xl bg-slate-50 p-8">
-              <h2 className="font-serif text-3xl font-bold text-slate-900">About Freelancer</h2>
-              <p className="mt-4 leading-relaxed text-slate-600">
-                {freelancer.freelancerProfile.bio || "Freelancer ini belum menambahkan bio."}
-              </p>
-            </div>
-
-            <div className="mt-10 rounded-3xl bg-slate-50 p-8">
-              <h2 className="font-serif text-3xl font-bold text-slate-900">Skills</h2>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {skills.length > 0 ? (
-                  skills.map((skill: string) => (
-                    <span key={skill} className="rounded-full bg-indigo-100 px-4 py-1.5 text-sm font-medium text-indigo-700">
-                      {skill}
-                    </span>
-                  ))
-                ) : (
-                  <p className="text-slate-500">Belum ada skill ditambahkan.</p>
-                )}
-              </div>
-            </div>
-
-            <div className="mt-10 rounded-3xl bg-slate-50 p-8">
-              <h2 className="font-serif text-3xl font-bold text-slate-900">Portfolio</h2>
-
-              {freelancer.freelancerProfile.portfolios.length > 0 ? (
-                <div className="mt-6 grid gap-4 md:grid-cols-2">
-                  {freelancer.freelancerProfile.portfolios.map((portfolio: (typeof freelancer.freelancerProfile.portfolios)[number]) => (
-                    <div key={portfolio.id} className="rounded-2xl border border-slate-200 bg-white p-5">
-                      <h3 className="text-lg font-semibold text-slate-900">{portfolio.projectTitle || "Untitled Project"}</h3>
-                      <p className="mt-2 line-clamp-3 text-sm text-slate-600">
-                        {portfolio.projectDescription || "Belum ada deskripsi project."}
-                      </p>
-                      {portfolio.projectLink && (
-                        <a
-                          href={portfolio.projectLink}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="mt-4 inline-block text-sm font-medium text-indigo-700 hover:underline"
-                        >
-                          Visit Project
-                        </a>
-                      )}
-                    </div>
-                  ))}
-                </div>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {skills.length > 0 ? (
+                skills.map((skill) => (
+                  <span
+                    key={skill}
+                    className="rounded-full bg-white/20 px-4 py-1 text-sm backdrop-blur-md"
+                  >
+                    {skill}
+                  </span>
+                ))
               ) : (
-                <p className="mt-4 text-slate-500">Belum ada portfolio yang ditampilkan.</p>
+                <span className="rounded-full bg-white/20 px-4 py-1 text-sm">
+                  Belum ada skill
+                </span>
               )}
             </div>
+          </div>
+
+          <div className="grid gap-5 p-8 md:grid-cols-3">
+            <div className="rounded-3xl bg-slate-50 p-6">
+              <p className="text-sm text-slate-500">Email</p>
+              <h2 className="mt-1 break-all text-lg font-bold text-slate-800">
+                {freelancer.email}
+              </h2>
+            </div>
+
+            <div className="rounded-3xl bg-slate-50 p-6">
+              <p className="text-sm text-slate-500">Phone</p>
+              <h2 className="mt-1 text-lg font-bold text-slate-800">
+                {profile.phone || "-"}
+              </h2>
+            </div>
+
+            <div className="rounded-3xl bg-slate-50 p-6">
+              <p className="text-sm text-slate-500">Portfolio</p>
+              <h2 className="mt-1 text-2xl font-bold text-slate-800">
+                {profile.portfolios.length} Project
+              </h2>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 rounded-[30px] bg-white p-8 shadow-sm">
+          <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-sm font-medium text-indigo-600">
+                Selected Works
+              </p>
+              <h2 className="mt-1 text-3xl font-bold text-slate-900">
+                Portfolio
+              </h2>
+            </div>
+
+            <p className="text-sm text-slate-500">
+              Project yang pernah dikerjakan freelancer.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {profile.portfolios.length > 0 ? (
+              profile.portfolios.map((portfolio) => (
+                <article
+                  key={portfolio.id}
+                  className="overflow-hidden rounded-3xl border border-slate-100 bg-slate-50"
+                >
+                  {portfolio.image ? (
+                    <img
+                      src={portfolio.image}
+                      alt={portfolio.projectTitle || "Portfolio image"}
+                      className="h-48 w-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-48 w-full items-center justify-center bg-slate-200 text-sm text-slate-500">
+                      No Image
+                    </div>
+                  )}
+
+                  <div className="p-5">
+                    <h3 className="text-lg font-bold text-slate-900">
+                      {portfolio.projectTitle || "Untitled Project"}
+                    </h3>
+
+                    <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-600">
+                      {portfolio.projectDescription ||
+                        "Belum ada deskripsi project."}
+                    </p>
+
+                    {portfolio.projectLink && (
+                      <a
+                        href={portfolio.projectLink}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-4 inline-block rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700"
+                      >
+                        Visit Project
+                      </a>
+                    )}
+                  </div>
+                </article>
+              ))
+            ) : (
+              <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-10 text-center md:col-span-2 lg:col-span-3">
+                <h3 className="text-lg font-bold text-slate-800">
+                  Belum ada portfolio
+                </h3>
+
+                <p className="mt-2 text-sm text-slate-500">
+                  Freelancer ini belum menambahkan project.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </section>
