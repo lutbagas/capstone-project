@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function RegisterPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#F5F7FB] px-6">
-      <div className="w-full max-w-md rounded-[24px] border border-indigo-100 bg-white/80 p-8 shadow-[0_20px_60px_rgba(79,70,229,0.15)] backdrop-blur-md">
+      <div className="w-full max-w-md rounded-3xl border border-indigo-100 bg-white/80 p-8 shadow-[0_20px_60px_rgba(79,70,229,0.15)] backdrop-blur-md">
 
         <h1 className="text-center font-serif text-3xl font-bold text-indigo-700">
           Create Account

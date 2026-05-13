@@ -1,8 +1,8 @@
 import ClientNavbar from "@/components/ClientNavbar";
 import Footer from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
-import { notFound } from "next/navigation";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 type Props = {
   params: Promise<{
@@ -14,10 +14,15 @@ export default async function ClientProfilePage({
   params,
 }: Props) {
   const { id } = await params;
+  const clientId = Number(id);
+
+  if (Number.isNaN(clientId)) {
+    notFound();
+  }
 
   const client = await prisma.user.findFirst({
     where: {
-      id: Number(id),
+      id: clientId,
       role: "client",
     },
     include: {
@@ -29,6 +34,19 @@ export default async function ClientProfilePage({
     notFound();
   }
 
+  const freelancers = await prisma.user.findMany({
+    where: {
+      role: "freelancer",
+    },
+    include: {
+      freelancerProfile: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 6,
+  });
+
   return (
     <main className="min-h-screen bg-[#F5F7FB]">
       <ClientNavbar
@@ -36,16 +54,20 @@ export default async function ClientProfilePage({
         userId={client.id}
       />
 
-      <section className="mx-auto max-w-[1100px] px-10 py-14">
-        <div className="overflow-hidden rounded-[32px] border border-indigo-100 bg-white shadow-[0_20px_60px_rgba(79,70,229,0.12)]">
+      <section className="mx-auto max-w-275 px-10 py-14">
+        <div className="overflow-hidden rounded-4xl border border-indigo-100 bg-white shadow-[0_20px_60px_rgba(79,70,229,0.12)]">
           
-          <div className="h-[240px] bg-gradient-to-r from-indigo-700 via-indigo-500 to-blue-500" />
+          {/* Banner */}
+          <div className="h-60 bg-linear-to-r from-indigo-700 via-indigo-500 to-blue-500" />
 
           <div className="relative px-10 pb-10">
+            
+            {/* Avatar */}
             <div className="-mt-20 flex h-40 w-40 items-center justify-center rounded-full border-8 border-white bg-indigo-600 text-6xl font-bold text-white shadow-xl">
               {client.name?.charAt(0)}
             </div>
 
+            {/* Header */}
             <div className="mt-6 flex items-center justify-between">
               <div>
                 <h1 className="font-serif text-5xl font-bold text-slate-900">
@@ -54,37 +76,8 @@ export default async function ClientProfilePage({
 
                 <p className="mt-2 text-lg text-slate-500">
                   {client.clientProfile?.companyName ||
-                    "No company"}
+                    "No company information"}
                 </p>
-              </div>
-
-              <Link href={`/clients/${client.id}`}>
-                <button className="rounded-full bg-indigo-600 px-6 py-3 font-medium text-white transition hover:bg-indigo-700">
-                  Edit Profile
-                </button>
-              </Link>
-            </div>
-
-            <div className="mt-10 grid grid-cols-3 gap-5">
-              <div className="rounded-2xl bg-slate-50 p-6">
-                <p className="text-sm text-slate-500">
-                  Email
-                </p>
-
-                <h3 className="mt-2 text-lg font-semibold text-slate-900">
-                  {client.email}
-                </h3>
-              </div>
-
-              <div className="rounded-2xl bg-slate-50 p-6">
-                <p className="text-sm text-slate-500">
-                  Company
-                </p>
-
-                <h3 className="mt-2 text-lg font-semibold text-slate-900">
-                  {client.clientProfile?.companyName ||
-                    "-"}
-                </h3>
               </div>
 
               <div className="rounded-2xl bg-slate-50 p-6">
@@ -93,13 +86,12 @@ export default async function ClientProfilePage({
                 </p>
 
                 <h3 className="mt-2 text-lg font-semibold text-slate-900">
-                  {new Date(
-                    client.createdAt
-                  ).toLocaleDateString()}
+                  {new Date(client.createdAt).toLocaleDateString()}
                 </h3>
               </div>
             </div>
 
+            {/* About Company */}
             <div className="mt-10 rounded-3xl bg-slate-50 p-8">
               <h2 className="font-serif text-3xl font-bold text-slate-900">
                 About Company
@@ -109,6 +101,62 @@ export default async function ClientProfilePage({
                 {client.clientProfile?.description ||
                   "No description yet"}
               </p>
+            </div>
+
+            {/* Freelancers */}
+            <div className="mt-10 rounded-3xl bg-slate-50 p-8">
+              <div className="flex items-center justify-between gap-3">
+                <h2 className="font-serif text-3xl font-bold text-slate-900">
+                  Freelancers to Explore
+                </h2>
+
+                <Link
+                  href="/clients"
+                  className="rounded-full border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-700 transition hover:bg-indigo-600 hover:text-white"
+                >
+                  Lihat Semua
+                </Link>
+              </div>
+
+              {freelancers.length > 0 ? (
+                <div className="mt-6 grid gap-4 md:grid-cols-2">
+                  {freelancers.map((freelancer) => (
+                    <div
+                      key={freelancer.id}
+                      className="rounded-2xl border border-slate-200 bg-white p-5"
+                    >
+                      <div className="flex items-center justify-between gap-4">
+                        <div>
+                          <h3 className="text-lg font-semibold text-slate-900">
+                            {freelancer.name || "Freelancer"}
+                          </h3>
+
+                          <p className="text-sm text-slate-500">
+                            {freelancer.freelancerProfile?.title ||
+                              "Professional Freelancer"}
+                          </p>
+                        </div>
+
+                        <Link
+                          href={`/freelancers/profile/${freelancer.id}`}
+                          className="rounded-full bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-indigo-700"
+                        >
+                          View
+                        </Link>
+                      </div>
+
+                      <p className="mt-3 line-clamp-2 text-sm text-slate-600">
+                        {freelancer.freelancerProfile?.bio ||
+                          "Freelancer ini belum menambahkan bio."}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-5 text-slate-500">
+                  Belum ada freelancer tersedia.
+                </p>
+              )}
             </div>
           </div>
         </div>

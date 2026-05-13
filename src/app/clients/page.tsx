@@ -24,7 +24,7 @@ function Hero({ name }: { name: string }) {
         Your Business
       </h1>
 
-      <div className="mx-auto mt-8 flex h-[500px] w-full max-w-[1100px] items-end overflow-hidden rounded-[28px] border border-indigo-100 bg-[url('/images/hero.png')] bg-cover bg-center shadow-[0_25px_70px_rgba(79,70,229,0.22)]">
+      <div className="mx-auto mt-8 flex h-125 w-full max-w-275 items-end overflow-hidden rounded-[28px] border border-indigo-100 bg-[url('/images/hero.png')] bg-cover bg-center shadow-[0_25px_70px_rgba(79,70,229,0.22)]">
         <div className="m-10 rounded-2xl bg-white/15 px-6 py-4 text-left text-white backdrop-blur-md">
           <p className="text-sm text-white/80">
             Available Talent
@@ -46,7 +46,7 @@ function Hero({ name }: { name: string }) {
 function DeveloperCard({ dev }: { dev: Developer }) {
   return (
     <div className="group rounded-[22px] border border-indigo-100 bg-white p-3 shadow-[0_10px_25px_rgba(79,70,229,0.08)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_24px_50px_rgba(79,70,229,0.18)]">
-      <div className="mb-4 flex h-40 items-center justify-center rounded-[18px] bg-gradient-to-br from-indigo-100 via-slate-100 to-white">
+      <div className="mb-4 flex h-40 items-center justify-center rounded-[18px] bg-linear-to-br from-indigo-100 via-slate-100 to-white">
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-indigo-600 text-2xl font-bold text-white">
           {dev.name.charAt(0)}
         </div>
@@ -75,7 +75,7 @@ function DeveloperCard({ dev }: { dev: Developer }) {
 
         <div className="mt-5 flex items-center justify-between">
           <Link
-            href={`/freelancers/${dev.id}`}
+            href={`/freelancers/profile/${dev.id}`}
             className="rounded-full border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-700 transition hover:bg-indigo-600 hover:text-white"
           >
             View Profile
@@ -108,7 +108,7 @@ export default async function ClientsPage() {
     },
   });
 
-  const developers: Developer[] = freelancers.map(freelancer => ({
+  const developers: Developer[] = freelancers.map((freelancer: (typeof freelancers)[number]) => ({
     id: freelancer.id,
     name: freelancer.name || "Anonymous",
     title: freelancer.freelancerProfile?.title || "",
@@ -125,7 +125,7 @@ export default async function ClientsPage() {
 
       <Hero name={user.name || "Client"} />
 
-      <section className="mx-auto max-w-[1100px] px-10 py-10">
+      <section className="mx-auto max-w-275 px-10 py-10">
         <div className="mb-10">
           <h2 className="font-serif text-5xl font-bold text-slate-900">
             Top Freelancers
