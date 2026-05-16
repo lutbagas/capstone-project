@@ -52,7 +52,8 @@ export default async function FreelancerDashboardPage({ params }: Props) {
           projectTitle: true,
           projectDescription: true,
           projectLink: true,
-          image: true,
+          imageUrl: true,
+          imagePublicId: true,
         },
       },
     },
@@ -67,7 +68,11 @@ export default async function FreelancerDashboardPage({ params }: Props) {
     phone: profile.phone,
     visibility: profile.visibility,
     user,
-    portfolios: profile.portfolios,
+    portfolios: profile.portfolios.map((p: any) => ({
+      ...p,
+      imageUrl: p.imageUrl || p.image || null,
+      imagePublicId: p.imagePublicId || null,
+    })),
   };
 
   return <FreelancerProfileEditor profile={data} />;

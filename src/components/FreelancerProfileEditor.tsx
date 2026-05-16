@@ -8,7 +8,8 @@ type Portfolio = {
   projectTitle: string | null;
   projectDescription: string | null;
   projectLink: string | null;
-  image: string | null;
+  imageUrl: string | null;
+  imagePublicId?: string | null;
 };
 
 type Profile = {
@@ -43,11 +44,16 @@ export default function FreelancerProfileEditor({ profile }: Props) {
     visibility: profile.visibility || "public",
   });
 
-  const [portfolioForm, setPortfolioForm] = useState({
+  const [portfolioForm, setPortfolioForm] = useState<{
+    projectTitle: string;
+    projectDescription: string;
+    projectLink: string;
+    image: File | null;
+  }>({
     projectTitle: "",
     projectDescription: "",
     projectLink: "",
-    image: "",
+    image: null,
   });
 
   const [loadingProfile, setLoadingProfile] = useState(false);
@@ -72,9 +78,15 @@ export default function FreelancerProfileEditor({ profile }: Props) {
   const handlePortfolioChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    if (e.target instanceof HTMLInputElement && e.target.type === "file") {
+      const file = (e.target as HTMLInputElement).files?.[0] || null;
+      setPortfolioForm({ ...portfolioForm, image: file });
+      return;
+    }
+
     setPortfolioForm({
       ...portfolioForm,
-      [e.target.name]: e.target.value,
+      [e.target.name]: (e.target as HTMLInputElement).value,
     });
   };
 
@@ -113,12 +125,17 @@ export default function FreelancerProfileEditor({ profile }: Props) {
     setLoadingPortfolio(true);
 
     try {
+      const formData = new FormData();
+      formData.append("projectTitle", portfolioForm.projectTitle);
+      formData.append("projectDescription", portfolioForm.projectDescription);
+      formData.append("projectLink", portfolioForm.projectLink);
+      if (portfolioForm.image) {
+        formData.append("image", portfolioForm.image);
+      }
+
       const res = await fetch(`/api/freelancers/${profile.userId}/portfolios`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(portfolioForm),
+        body: formData,
       });
 
       const data = await res.json();
@@ -134,7 +151,7 @@ export default function FreelancerProfileEditor({ profile }: Props) {
         projectTitle: "",
         projectDescription: "",
         projectLink: "",
-        image: "",
+        image: null,
       });
 
       router.refresh();
@@ -488,14 +505,13 @@ export default function FreelancerProfileEditor({ profile }: Props) {
 
               <div>
                 <label className="mb-2 block text-sm font-medium text-slate-700">
-                  Image URL
+                  Image File
                 </label>
                 <input
                   name="image"
-                  type="text"
-                  value={portfolioForm.image}
+                  type="file"
+                  accept="image/*"
                   onChange={handlePortfolioChange}
-                  placeholder="https://image-url.com/image.png"
                   className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
                 />
               </div>
@@ -544,9 +560,9 @@ export default function FreelancerProfileEditor({ profile }: Props) {
                     key={portfolio.id}
                     className="overflow-hidden rounded-3xl border border-slate-100 bg-slate-50"
                   >
-                    {portfolio.image ? (
+                    {portfolio.imageUrl ? (
                       <img
-                        src={portfolio.image}
+                        src={portfolio.imageUrl}
                         alt={portfolio.projectTitle || "Portfolio image"}
                         className="h-44 w-full object-cover"
                       />

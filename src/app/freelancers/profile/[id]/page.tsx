@@ -52,6 +52,13 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
     .map((skill) => skill.trim())
     .filter(Boolean);
 
+  // normalize portfolios for backward compatibility (legacy `image` field)
+  profile.portfolios = profile.portfolios.map((p: any) => ({
+    ...p,
+    imageUrl: p.imageUrl || p.image || null,
+    imagePublicId: p.imagePublicId || null,
+  }));
+
   return (
     <main className="min-h-screen bg-slate-50">
       {client && (
@@ -157,9 +164,9 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
                   key={portfolio.id}
                   className="overflow-hidden rounded-3xl border border-slate-100 bg-slate-50"
                 >
-                  {portfolio.image ? (
+                  {portfolio.imageUrl ? (
                     <img
-                      src={portfolio.image}
+                      src={portfolio.imageUrl}
                       alt={portfolio.projectTitle || "Portfolio image"}
                       className="h-48 w-full object-cover"
                     />
