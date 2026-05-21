@@ -4,7 +4,7 @@ export default function Footer() {
       <div className="mx-auto max-w-275">
         <div className="grid grid-cols-4 gap-10">
           <div>
-            <h3 className="text-3xl font-bold text-indigo-700">
+            <h3 className="text-3xl font-bold text-emerald-700">
               InfoWebLancers
             </h3>
 

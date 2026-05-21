@@ -70,7 +70,7 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
 
       <section className="mx-auto max-w-7xl px-6 py-10">
         <div className="overflow-hidden rounded-[30px] bg-white shadow-xl">
-          <div className="bg-linear-to-r from-indigo-600 via-violet-600 to-purple-600 px-8 py-12 text-white">
+          <div className="bg-linear-to-r from-emerald-600 via-violet-600 to-purple-600 px-8 py-12 text-white">
             <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <div className="flex items-center gap-5">
                 <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white/40 bg-white/20 text-4xl font-bold backdrop-blur-md">
@@ -78,13 +78,13 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
                 </div>
 
                 <div>
-                  <p className="text-sm text-indigo-100">Freelancer Profile</p>
+                  <p className="text-sm text-emerald-100">Freelancer Profile</p>
 
                   <h1 className="mt-1 text-4xl font-bold">
                     {freelancer.name || "Freelancer"}
                   </h1>
 
-                  <p className="mt-2 text-lg text-indigo-100">
+                  <p className="mt-2 text-lg text-emerald-100">
                     {profile.title || "Professional Freelancer"}
                   </p>
                 </div>
@@ -95,7 +95,7 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
               </div>
             </div>
 
-            <p className="mt-8 max-w-3xl text-indigo-50">
+            <p className="mt-8 max-w-3xl text-emerald-50">
               {profile.bio || "Freelancer ini belum menambahkan bio."}
             </p>
 
@@ -144,7 +144,7 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
         <div className="mt-8 rounded-[30px] bg-white p-8 shadow-sm">
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-sm font-medium text-indigo-600">
+              <p className="text-sm font-medium text-emerald-600">
                 Selected Works
               </p>
               <h2 className="mt-1 text-3xl font-bold text-slate-900">
@@ -191,7 +191,7 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
                         href={portfolio.projectLink}
                         target="_blank"
                         rel="noreferrer"
-                        className="mt-4 inline-block rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700"
+                        className="mt-4 inline-block rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700"
                       >
                         Visit Project
                       </a>

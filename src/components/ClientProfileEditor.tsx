@@ -71,21 +71,21 @@ export default function ClientProfileEditor({ profile }: Props) {
   return (
     <main className="min-h-screen bg-slate-50 p-6">
       <section className="mx-auto max-w-7xl">
-        <div className="rounded-[30px] bg-linear-to-r from-indigo-600 via-violet-600 to-purple-600 p-8 text-white shadow-xl">
-          <p className="text-sm text-indigo-100">Client Dashboard</p>
+        <div className="rounded-[30px] bg-linear-to-r from-emerald-600 via-violet-600 to-purple-600 p-8 text-white shadow-xl">
+          <p className="text-sm text-emerald-100">Client Dashboard</p>
 
           <h1 className="mt-2 text-3xl font-bold">
             Halo, {profile.user.name || "Client"}
           </h1>
 
-          <p className="mt-2 text-indigo-100">{profile.user.email}</p>
+          <p className="mt-2 text-emerald-100">{profile.user.email}</p>
 
           <div className="mt-6">
             <h2 className="text-2xl font-bold">
               {form.companyName || "Belum ada nama perusahaan"}
             </h2>
 
-            <p className="mt-3 max-w-2xl text-indigo-100">
+            <p className="mt-3 max-w-2xl text-emerald-100">
               {form.description || "Belum ada deskripsi perusahaan."}
             </p>
           </div>
@@ -131,7 +131,7 @@ export default function ClientProfileEditor({ profile }: Props) {
                   value={form.companyName}
                   onChange={handleChange}
                   placeholder="PT. Example Company"
-                  className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                  className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                 />
               </div>
 
@@ -145,14 +145,14 @@ export default function ClientProfileEditor({ profile }: Props) {
                   value={form.description}
                   onChange={handleChange}
                   placeholder="Ceritakan tentang perusahaan Anda..."
-                  className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                  className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={loadingProfile}
-                className="rounded-2xl bg-indigo-600 px-6 py-3 font-semibold text-white transition hover:bg-indigo-700 disabled:opacity-50"
+                className="rounded-2xl bg-emerald-600 px-6 py-3 font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-50"
               >
                 {loadingProfile ? "Saving..." : "Save Changes"}
               </button>

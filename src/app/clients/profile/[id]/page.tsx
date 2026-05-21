@@ -55,15 +55,15 @@ export default async function ClientProfilePage({
       />
 
       <section className="mx-auto max-w-275 px-10 py-14">
-        <div className="overflow-hidden rounded-4xl border border-indigo-100 bg-white shadow-[0_20px_60px_rgba(79,70,229,0.12)]">
+        <div className="overflow-hidden rounded-4xl border border-emerald-100 bg-white shadow-[0_20px_60px_rgba(79,70,229,0.12)]">
           
           {/* Banner */}
-          <div className="h-60 bg-linear-to-r from-indigo-700 via-indigo-500 to-blue-500" />
+          <div className="h-60 bg-linear-to-r from-emerald-700 via-emerald-500 to-blue-500" />
 
           <div className="relative px-10 pb-10">
             
             {/* Avatar */}
-            <div className="-mt-20 flex h-40 w-40 items-center justify-center rounded-full border-8 border-white bg-indigo-600 text-6xl font-bold text-white shadow-xl">
+            <div className="-mt-20 flex h-40 w-40 items-center justify-center rounded-full border-8 border-white bg-emerald-600 text-6xl font-bold text-white shadow-xl">
               {client.name?.charAt(0)}
             </div>
 
@@ -112,7 +112,7 @@ export default async function ClientProfilePage({
 
                 <Link
                   href="/clients"
-                  className="rounded-full border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-700 transition hover:bg-indigo-600 hover:text-white"
+                  className="rounded-full border border-emerald-200 px-4 py-2 text-sm font-medium text-emerald-700 transition hover:bg-emerald-600 hover:text-white"
                 >
                   Lihat Semua
                 </Link>
@@ -139,7 +139,7 @@ export default async function ClientProfilePage({
 
                         <Link
                           href={`/freelancers/profile/${freelancer.id}`}
-                          className="rounded-full bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-indigo-700"
+                          className="rounded-full bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-emerald-700"
                         >
                           View
                         </Link>
