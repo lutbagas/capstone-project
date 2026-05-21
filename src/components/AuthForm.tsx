@@ -99,13 +99,13 @@ export default function AuthForm({ type }: Props) {
             name="name"
             placeholder="Name"
             onChange={handleChange}
-            className="border border-indigo-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="border border-emerald-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
 
           <select
             name="role"
             onChange={handleChange}
-            className="border border-indigo-100 rounded-lg p-2"
+            className="border border-emerald-100 rounded-lg p-2"
           >
             <option value="freelancer">Freelancer</option>
             <option value="client">Client</option>
@@ -117,7 +117,7 @@ export default function AuthForm({ type }: Props) {
         name="email"
         placeholder="Email"
         onChange={handleChange}
-        className="border border-indigo-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        className="border border-emerald-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
       />
 
       <input
@@ -125,12 +125,12 @@ export default function AuthForm({ type }: Props) {
         name="password"
         placeholder="Password"
         onChange={handleChange}
-        className="border border-indigo-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        className="border border-emerald-100 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
       />
 
       <button
         disabled={loading}
-        className="bg-indigo-600 text-white rounded-lg p-2 hover:bg-indigo-700 transition disabled:opacity-50"
+        className="bg-emerald-600 text-white rounded-lg p-2 hover:bg-emerald-700 transition disabled:opacity-50"
       >
         {loading
           ? "Loading..."
