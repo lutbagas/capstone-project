@@ -1,6 +1,9 @@
-import { notFound } from "next/navigation";
-import {prisma} from "@/lib/prisma";
+import { notFound, redirect } from "next/navigation";
+import Link from "next/link";
+import { prisma } from "@/lib/prisma";
 import FreelancerProfileEditor from "@/components/FreelancerProfileEditor";
+import Footer from "@/components/Footer";
+import { requireAuth } from "@/lib/auth";
 
 type Props = {
   params: Promise<{
@@ -9,12 +12,17 @@ type Props = {
 };
 
 export default async function FreelancerDashboardPage({ params }: Props) {
+  const authUser = await requireAuth(["freelancer"]);
   const { id } = await params;
 
   const userId = Number(id);
 
   if (Number.isNaN(userId)) {
     notFound();
+  }
+
+  if (authUser.id !== userId) {
+    redirect(`/freelancers/${authUser.id}`);
   }
 
   const user = await prisma.user.findUnique({
@@ -75,5 +83,47 @@ export default async function FreelancerDashboardPage({ params }: Props) {
     })),
   };
 
-  return <FreelancerProfileEditor profile={data} />;
+
+  return (
+    <main className="min-h-screen bg-slate-50">
+      <header className="bg-[#F5FBF8] pb-6">
+        <div className="mx-auto max-w-7xl px-6 pt-8">
+          <div className="flex flex-col gap-6 overflow-hidden rounded-[30px] border border-emerald-100 bg-white px-8 py-8 shadow-sm md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[3px] text-emerald-600">
+                Freelancer Dashboard
+              </p>
+              <h1 className="mt-3 text-3xl font-bold text-slate-950">
+                Kelola Profil Freelancer
+              </h1>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-500">
+                Perbarui profil, keahlian, dan portofolio agar lebih mudah ditemukan oleh client.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-3 md:flex-row md:items-center">
+              <Link
+                href="/freelancers"
+                className="inline-flex rounded-full border border-emerald-600 bg-white px-4 py-2 text-sm font-medium text-emerald-700 transition hover:bg-emerald-50"
+              >
+                Lihat Listing
+              </Link>
+              <Link
+                href="/api/auth/logout"
+                className="inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-emerald-600 hover:text-emerald-700"
+              >
+                Logout
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section className="mx-auto w-full max-w-7xl px-6 pb-16">
+        <FreelancerProfileEditor profile={data} />
+      </section>
+
+      <Footer />
+    </main>
+  );
 }

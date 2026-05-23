@@ -212,6 +212,39 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
             )}
           </div>
         </div>
+
+        <div className="mt-8 rounded-[30px] bg-white p-8 shadow-sm">
+          <div className="flex flex-col gap-4 rounded-3xl border border-emerald-100 bg-emerald-50 p-6 text-slate-900 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
+                Kontak WhatsApp
+              </p>
+              <h2 className="mt-2 text-2xl font-bold">
+                Hubungi freelancer via WhatsApp
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600">
+                Klik tombol untuk langsung mengirim pesan WhatsApp ke freelancer.
+              </p>
+            </div>
+
+            {profile.phone ? (
+              <a
+                href={`https://wa.me/${profile.phone.replace(/\D/g, "")}?text=${encodeURIComponent(
+                  `Halo ${freelancer.name || "Freelancer"}, saya tertarik berdiskusi tentang proyek Anda.`,
+                )}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex rounded-full bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+              >
+                Chat via WhatsApp
+              </a>
+            ) : (
+              <div className="rounded-full border border-rose-300 bg-rose-50 px-5 py-3 text-sm font-semibold text-rose-700">
+                Nomor WhatsApp belum tersedia
+              </div>
+            )}
+          </div>
+        </div>
       </section>
 
       <Footer />

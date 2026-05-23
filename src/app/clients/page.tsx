@@ -2,6 +2,8 @@ import ClientNavbar from "@/components/ClientNavbar";
 import Footer from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { requireAuth } from "@/lib/auth";
 
 type Developer = {
   id: number;
@@ -101,33 +103,16 @@ function DeveloperCard({ dev }: { dev: Developer }) {
 }
 
 export default async function ClientsPage() {
-  const user = await prisma.user.findFirst({
+  const authUser = await requireAuth(["client"]);
+
+  const user = await prisma.user.findUnique({
     where: {
-      role: "client",
+      id: authUser.id,
     },
   });
 
-  if (!user) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-[#F5FBF8]">
-        <div className="rounded-[22px] border border-emerald-100 bg-white px-8 py-6 text-center shadow-[0_10px_25px_rgba(16,185,129,0.08)]">
-          <h1 className="font-serif text-2xl font-bold text-slate-950">
-            Client not found
-          </h1>
-
-          <p className="mt-2 text-sm text-slate-500">
-            Please login using a client account.
-          </p>
-
-          <Link
-            href="/login"
-            className="mt-5 inline-flex rounded-full bg-emerald-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700"
-          >
-            Back to Login
-          </Link>
-        </div>
-      </main>
-    );
+  if (!user || user.role !== "client") {
+    notFound();
   }
 
   const freelancers = await prisma.user.findMany({

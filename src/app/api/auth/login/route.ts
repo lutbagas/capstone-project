@@ -4,16 +4,24 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { LoginBody } from "@/types/auth";
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export async function POST(req: Request) {
   try {
     const body: LoginBody = await req.json();
     const { email, password } = body;
 
-    // cek input
     if (!email || !password) {
       return NextResponse.json(
         { error: "Email dan password wajib diisi" },
-        { status: 400 }
+        { status: 400 },
+      );
+    }
+
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { error: "Email tidak valid. Gunakan format email lengkap." },
+        { status: 400 },
       );
     }
 
@@ -51,10 +59,10 @@ export async function POST(req: Request) {
         role: user.role,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "1d" },
     );
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       message: "Login berhasil",
       token,
       user: {
@@ -64,6 +72,16 @@ export async function POST(req: Request) {
         role: user.role,
       },
     });
+
+    response.cookies.set("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24,
+    });
+
+    return response;
   } catch (error) {
     console.error(error);
     return NextResponse.json(

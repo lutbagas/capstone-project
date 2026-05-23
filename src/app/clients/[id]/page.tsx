@@ -1,6 +1,7 @@
-import { notFound } from "next/navigation";
-import {prisma} from "@/lib/prisma";
+import { notFound, redirect } from "next/navigation";
+import { prisma } from "@/lib/prisma";
 import ClientProfileEditor from "@/components/ClientProfileEditor";
+import { requireAuth } from "@/lib/auth";
 
 type Props = {
   params: Promise<{
@@ -9,12 +10,17 @@ type Props = {
 };
 
 export default async function ClientDashboardPage({ params }: Props) {
+  const authUser = await requireAuth(["client"]);
   const { id } = await params;
 
   const userId = Number(id);
 
   if (Number.isNaN(userId)) {
     notFound();
+  }
+
+  if (authUser.id !== userId) {
+    redirect("/clients");
   }
 
   const user = await prisma.user.findUnique({

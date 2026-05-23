@@ -2,11 +2,26 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export async function POST(req: Request) {
   try {
     const { name, email, password, role } = await req.json();
 
-    // cek email
+    if (!name || !email || !password || !role) {
+      return NextResponse.json(
+        { error: "Semua field wajib diisi" },
+        { status: 400 },
+      );
+    }
+
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { error: "Email tidak valid. Gunakan format email lengkap." },
+        { status: 400 },
+      );
+    }
+
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });

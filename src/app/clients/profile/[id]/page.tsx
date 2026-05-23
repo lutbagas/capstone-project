@@ -2,7 +2,8 @@ import ClientNavbar from "@/components/ClientNavbar";
 import Footer from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { requireAuth } from "@/lib/auth";
 
 type Props = {
   params: Promise<{
@@ -13,11 +14,16 @@ type Props = {
 export default async function ClientProfilePage({
   params,
 }: Props) {
+  const authUser = await requireAuth(["client"]);
   const { id } = await params;
   const clientId = Number(id);
 
   if (Number.isNaN(clientId)) {
     notFound();
+  }
+
+  if (authUser.id !== clientId) {
+    redirect("/clients");
   }
 
   const client = await prisma.user.findFirst({

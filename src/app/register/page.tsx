@@ -1,7 +1,10 @@
 import AuthForm from "@/components/AuthForm";
 import Link from "next/link";
+import { redirectIfAuthenticated } from "@/lib/auth";
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
+  await redirectIfAuthenticated();
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#F5F7FB] px-6">
       <div className="w-full max-w-md rounded-3xl border border-emerald-100 bg-white/80 p-8 shadow-[0_20px_60px_rgba(79,70,229,0.15)] backdrop-blur-md">

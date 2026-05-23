@@ -7,6 +7,8 @@ type Props = {
   type: "login" | "register";
 };
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export default function AuthForm({ type }: Props) {
   const router = useRouter();
 
@@ -28,6 +30,12 @@ export default function AuthForm({ type }: Props) {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+
+    if (!form.email || !emailRegex.test(form.email)) {
+      alert("Email tidak valid. Gunakan format email lengkap.");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -43,6 +51,7 @@ export default function AuthForm({ type }: Props) {
 
       const res = await fetch(endpoint, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -114,6 +123,7 @@ export default function AuthForm({ type }: Props) {
       )}
 
       <input
+        type="email"
         name="email"
         placeholder="Email"
         onChange={handleChange}
