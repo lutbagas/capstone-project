@@ -12,7 +12,7 @@ export default function ClientNavbar({
   userId,
 }: Props) {
   return (
-    <nav className="mx-auto mt-3.5 flex max-w-[1100px] items-center justify-between rounded-[20px] border border-emerald-100 bg-white/80 px-8 py-3 text-slate-900 shadow-[0_10px_30px_rgba(79,70,229,0.12)] backdrop-blur-md">
+    <nav className="mx-auto mt-3.5 flex max-w-275 items-center justify-between rounded-[20px] border border-emerald-100 bg-white/80 px-8 py-3 text-slate-900 shadow-[0_10px_30px_rgba(79,70,229,0.12)] backdrop-blur-md">
       <div className="font-serif text-[30px] font-bold tracking-tight text-emerald-700">
         InfoWebLancers
       </div>
