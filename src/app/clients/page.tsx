@@ -142,6 +142,7 @@ export default async function ClientsPage() {
       <ClientNavbar
         userName={user.name || "Client"}
         userId={user.id}
+        role="client"
       />
 
       <Hero name={user.name || "Client"} />

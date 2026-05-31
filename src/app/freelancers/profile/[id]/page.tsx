@@ -2,6 +2,7 @@ import ClientNavbar from "@/components/ClientNavbar";
 import Footer from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import { getAuthPayload } from "@/lib/auth";
 
 type Props = {
   params: Promise<{
@@ -17,11 +18,17 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
     notFound();
   }
 
-  const client = await prisma.user.findFirst({
-    where: {
-      role: "client",
-    },
-  });
+  // Get the currently authenticated user
+  const authPayload = await getAuthPayload();
+  let currentUser = null;
+  
+  if (authPayload && authPayload.role === "client") {
+    currentUser = await prisma.user.findUnique({
+      where: {
+        id: authPayload.id,
+      },
+    });
+  }
 
   const freelancer = await prisma.user.findFirst({
     where: {
@@ -61,10 +68,11 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
 
   return (
     <main className="min-h-screen bg-slate-50">
-      {client && (
+      {currentUser && (
         <ClientNavbar
-          userName={client.name || "Client"}
-          userId={client.id}
+          userName={currentUser.name || "Client"}
+          userId={currentUser.id}
+          role="client"
         />
       )}
 

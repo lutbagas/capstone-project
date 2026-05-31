@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import ChangePasswordForm from "@/components/ChangePasswordForm";
 
 type Portfolio = {
   id: number;
@@ -439,6 +440,10 @@ export default function FreelancerProfileEditor({ profile }: Props) {
             </p>
           </div>
         </div>
+      </div>
+
+      <div className="mt-8">
+        <ChangePasswordForm />
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-3">

@@ -103,10 +103,10 @@ export default async function FreelancerDashboardPage({ params }: Props) {
 
             <div className="flex flex-col gap-3 md:flex-row md:items-center">
               <Link
-                href="/freelancers"
+                href={`/freelancers/${userId}`}
                 className="inline-flex rounded-full border border-emerald-600 bg-white px-4 py-2 text-sm font-medium text-emerald-700 transition hover:bg-emerald-50"
               >
-                Lihat Listing
+                Home
               </Link>
               <Link
                 href="/api/auth/logout"

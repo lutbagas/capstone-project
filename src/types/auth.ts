@@ -2,7 +2,7 @@ export type RegisterBody = {
   name: string;
   email: string;
   password: string;
-  role: "admin" | "freelancer" | "client";
+  role: "freelancer" | "client";
 };
 
 export type LoginBody = {

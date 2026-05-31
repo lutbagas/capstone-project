@@ -33,6 +33,23 @@ export async function POST(req: Request) {
       );
     }
 
+    if (role === "admin") {
+      return NextResponse.json(
+        {
+          error:
+            "Role admin tidak dapat didaftarkan melalui form. Buat akun admin langsung di database.",
+        },
+        { status: 403 }
+      );
+    }
+
+    if (!["client", "freelancer"].includes(role)) {
+      return NextResponse.json(
+        { error: "Role tidak valid" },
+        { status: 400 }
+      );
+    }
+
     // hash password
     const hashed = await bcrypt.hash(password, 10);
 
