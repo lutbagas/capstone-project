@@ -311,7 +311,7 @@ export default function AdminDashboardManager() {
 
   return (
     <main className="min-h-screen bg-[#F5FBF8] px-6 py-8 font-sans text-slate-950 md:px-10">
-      <div className="mx-auto max-w-[1200px]">
+      <div className="mx-auto max-w-300">
         <nav className="mb-8 flex items-center justify-between rounded-[20px] border border-emerald-100 bg-white/85 px-8 py-3 shadow-[0_10px_30px_rgba(16,185,129,0.12)] backdrop-blur-md">
           <Link
             href="/"
@@ -372,8 +372,8 @@ export default function AdminDashboardManager() {
             </div>
           </div>
 
-          <div className="rounded-[32px] border border-emerald-100 bg-white p-6 shadow-[0_25px_70px_rgba(16,185,129,0.18)]">
-            <div className="rounded-[26px] bg-gradient-to-br from-emerald-100 via-slate-100 to-white p-6">
+          <div className="rounded-4xl border border-emerald-100 bg-white p-6 shadow-[0_25px_70px_rgba(16,185,129,0.18)]">
+            <div className="rounded-[26px] bg-linear-to-br from-emerald-100 via-slate-100 to-white p-6">
               <p className="text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
                 Search User
               </p>
@@ -644,7 +644,7 @@ export default function AdminDashboardManager() {
                   </div>
                 </div>
               ) : (
-                <div className="mt-8 rounded-[24px] border border-dashed border-emerald-200 bg-emerald-50/60 p-6">
+                <div className="mt-8 rounded-3xl border border-dashed border-emerald-200 bg-emerald-50/60 p-6">
                   <h3 className="font-serif text-2xl font-bold text-slate-950">
                     User ini bukan freelancer
                   </h3>
