@@ -393,11 +393,18 @@ function Footer() {
                   Freelancers
                 </a>
               </li>
-
               <li>
                 <a href="#contact" className="transition hover:text-emerald-700">
                   Contact
                 </a>
+              </li>
+              <li>
+                <Link
+                  href="/about"
+                  className="transition hover:text-emerald-700"
+                >
+                  About us
+                </Link>
               </li>
             </ul>
           </div>
