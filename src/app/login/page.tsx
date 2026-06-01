@@ -6,28 +6,84 @@ export default async function LoginPage() {
   await redirectIfAuthenticated();
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#F5F7FB] px-6">
-      <div className="w-full max-w-md rounded-3xl border border-emerald-100 bg-white/80 p-8 shadow-[0_20px_60px_rgba(16,185,129,0.15)] backdrop-blur-md">       
-        <h1 className="text-center font-serif text-3xl font-bold text-emerald-700">
-          Welcome Back
-        </h1>
+    <main className="min-h-screen bg-[#F5FBF8] px-6 py-8 font-sans text-slate-950">
+      <div className="mx-auto flex max-w-275 items-center justify-between">
+        <Link
+          href="/"
+          className="font-serif text-[30px] font-bold tracking-tight text-emerald-700"
+        >
+          InfoWebLancers
+        </Link>
 
-        <p className="mt-2 text-center text-sm text-slate-600">
-          Login to continue to InfoWebLancers
-        </p>
+        <Link
+          href="/"
+          className="rounded-full border border-emerald-200 bg-white px-5 py-2.5 text-sm font-semibold text-emerald-700 shadow-sm transition hover:border-emerald-500 hover:bg-emerald-50"
+        >
+          Home
+        </Link>
+      </div>
 
-        <div className="mt-6">
-          <AuthForm type="login" />
+      <section className="mx-auto grid min-h-[calc(100vh-96px)] max-w-275 items-center gap-10 py-10 lg:grid-cols-[1fr_440px]">
+        <div className="hidden lg:block">
+          <p className="mb-5 inline-block rounded-full border border-emerald-100 bg-white px-5 py-2 text-sm font-medium text-emerald-700 shadow-sm">
+            Welcome back to InfoWebLancers
+          </p>
+
+          <h1 className="font-serif text-[64px] font-bold leading-[1.05] tracking-[-2px] text-slate-950">
+            Login untuk mulai menemukan developer terbaik.
+          </h1>
+
+          <p className="mt-6 max-w-xl text-base leading-8 text-slate-600">
+            Masuk sebagai client untuk mencari freelancer web developer, atau
+            sebagai freelancer untuk mengelola profile dan portofolio kamu.
+          </p>
+
+          <div className="mt-10 grid max-w-xl grid-cols-3 gap-3">
+            <div className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
+              <h3 className="text-2xl font-bold text-slate-950">Client</h3>
+              <p className="mt-1 text-xs text-slate-500">Cari talent</p>
+            </div>
+
+            <div className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
+              <h3 className="text-2xl font-bold text-slate-950">Talent</h3>
+              <p className="mt-1 text-xs text-slate-500">Kelola profile</p>
+            </div>
+
+            <div className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
+              <h3 className="text-2xl font-bold text-slate-950">Project</h3>
+              <p className="mt-1 text-xs text-slate-500">Lebih mudah</p>
+            </div>
+          </div>
         </div>
 
-        <p className="mt-6 text-center text-sm text-slate-600">
-          Don’t have an account?{" "}
-          <Link href="/register" className="text-emerald-600 hover:underline">
-            Register
-          </Link>
-        </p>
+        <div className="w-full rounded-4xl border border-emerald-100 bg-white/90 p-8 shadow-[0_25px_70px_rgba(16,185,129,0.18)] backdrop-blur-md">
+          <div className="mb-7 text-center">
+            <p className="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 font-serif text-2xl font-bold text-emerald-700">
+              IW
+            </p>
 
-      </div>
+            <h1 className="font-serif text-3xl font-bold text-slate-950">
+              Welcome Back
+            </h1>
+
+            <p className="mt-2 text-sm leading-6 text-slate-500">
+              Login to continue to your InfoWebLancers account.
+            </p>
+          </div>
+
+          <AuthForm type="login" />
+
+          <div className="mt-6 rounded-2xl border border-emerald-100 bg-emerald-50/60 px-4 py-3 text-center text-sm text-slate-600">
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/register"
+              className="font-semibold text-emerald-700 hover:underline"
+            >
+              Register
+            </Link>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
