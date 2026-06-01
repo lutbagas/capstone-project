@@ -39,6 +39,12 @@ export default function ClientNavbar({
         <div className="rounded-full bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700">
           {userName}
         </div>
+        <Link
+  href="/api/auth/logout"
+  className="rounded-full border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-600 transition duration-300 hover:border-red-500 hover:bg-red-500 hover:text-white"
+>
+  Logout
+</Link>
 
         <Link href={`/clients/profile/${userId}`}>
           <button className="cursor-pointer rounded-full border border-emerald-600 bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-white hover:text-emerald-600">
