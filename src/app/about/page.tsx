@@ -41,7 +41,7 @@ const teamMembers: TeamMember[] = [
 
 function Navbar() {
   return (
-    <nav className="sticky top-3 z-50 mx-auto mt-3 flex max-w-[1100px] items-center justify-between rounded-[20px] border border-emerald-100 bg-white/85 px-8 py-3 text-slate-900 shadow-[0_10px_30px_rgba(16,185,129,0.12)] backdrop-blur-md">
+    <nav className="sticky top-3 z-50 mx-auto mt-3 flex max-w-275 items-center justify-between rounded-[20px] border border-emerald-100 bg-white/85 px-8 py-3 text-slate-900 shadow-[0_10px_30px_rgba(16,185,129,0.12)] backdrop-blur-md">
       <Link
         href="/"
         className="font-serif text-[30px] font-bold tracking-tight text-emerald-700"
@@ -90,12 +90,12 @@ function Navbar() {
 
 function TeamCard({ member, index }: { member: TeamMember; index: number }) {
   return (
-    <div className="group rounded-[24px] border border-emerald-100 bg-white p-4 shadow-[0_10px_25px_rgba(16,185,129,0.08)] transition duration-300 hover:-translate-y-2 hover:shadow-[0_24px_50px_rgba(16,185,129,0.18)]">
-      <div className="mb-5 overflow-hidden rounded-[20px] bg-gradient-to-br from-emerald-100 via-slate-100 to-white p-3">
+    <div className="group rounded-3xl border border-emerald-100 bg-white p-4 shadow-[0_10px_25px_rgba(16,185,129,0.08)] transition duration-300 hover:-translate-y-2 hover:shadow-[0_24px_50px_rgba(16,185,129,0.18)]">
+      <div className="mb-5 overflow-hidden rounded-[20px] bg-linear-to-br from-emerald-100 via-slate-100 to-white p-3">
         <img
           src={member.image}
           alt={member.name}
-          className="h-[220px] w-full rounded-[16px] object-cover object-center transition duration-300 group-hover:scale-[1.03]"
+          className="h-55 w-full rounded-2xl object-cover object-center transition duration-300 group-hover:scale-[1.03]"
         />
       </div>
 
@@ -126,7 +126,7 @@ export default function AboutPage() {
       <Navbar />
 
       <section className="px-6 py-12 md:px-10">
-        <div className="mx-auto grid max-w-[1200px] items-center gap-10 lg:grid-cols-[1fr_0.85fr]">
+        <div className="mx-auto grid max-w-300 items-center gap-10 lg:grid-cols-[1fr_0.85fr]">
           <div>
             <p className="mb-5 inline-block rounded-full border border-emerald-100 bg-white px-5 py-2 text-sm font-medium text-emerald-700 shadow-sm">
               About Us
@@ -183,12 +183,12 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-[32px] border border-emerald-100 bg-white p-6 shadow-[0_25px_70px_rgba(16,185,129,0.18)]">
+          <div className="relative overflow-hidden rounded-4xl border border-emerald-100 bg-white p-6 shadow-[0_25px_70px_rgba(16,185,129,0.18)]">
             <div className="absolute right-0 top-0 h-40 w-40 rounded-bl-full bg-emerald-100" />
             <div className="absolute bottom-0 left-0 h-32 w-32 rounded-tr-full bg-emerald-50" />
 
             <div className="relative">
-              <div className="flex h-[280px] items-center justify-center rounded-[26px] bg-gradient-to-br from-emerald-100 via-slate-100 to-white">
+              <div className="flex h-70 items-center justify-center rounded-[26px] bg-linear-to-br from-emerald-100 via-slate-100 to-white">
                 <div className="text-center">
                   <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-emerald-600 font-serif text-4xl font-bold text-white shadow-lg">
                     IW
@@ -204,7 +204,7 @@ export default function AboutPage() {
                 </div>
               </div>
 
-              <div className="mt-6 rounded-[24px] border border-emerald-100 bg-[#F5FBF8] p-5">
+              <div className="mt-6 rounded-3xl border border-emerald-100 bg-[#F5FBF8] p-5">
                 <p className="text-xs font-semibold uppercase tracking-[3px] text-emerald-600">
                   Project Summary
                 </p>
@@ -224,7 +224,7 @@ export default function AboutPage() {
       </section>
 
       <section id="team" className="px-6 py-12 md:px-10">
-        <div className="mx-auto max-w-[1200px]">
+        <div className="mx-auto max-w-300">
           <div className="mb-8 text-center">
             <p className="text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
               Our Team
@@ -240,7 +240,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid gap-[18px] md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4.5 md:grid-cols-2 lg:grid-cols-4">
             {teamMembers.map((member, index) => (
               <TeamCard key={member.role} member={member} index={index} />
             ))}
