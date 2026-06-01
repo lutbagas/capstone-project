@@ -76,8 +76,7 @@ export default function Footer() {
             </h4>
 
             <p className="mb-4 text-sm leading-relaxed text-slate-500">
-              Hubungi kami melalui email untuk diskusi project atau kebutuhan
-              platform.
+              Punya pertanyaan? Kirim langsung email dibawah ini
             </p>
 
             <a
