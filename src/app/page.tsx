@@ -425,15 +425,6 @@ function Footer() {
                   Register
                 </Link>
               </li>
-
-              <li>
-                <Link
-                  href="/freelancers"
-                  className="transition hover:text-emerald-700"
-                >
-                  Browse Freelancers
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -443,8 +434,7 @@ function Footer() {
             </h4>
 
             <p className="mb-4 text-sm leading-relaxed text-slate-500">
-              Punya pertanyaan? Kirim email langsung
-              melalui tombol di bawah.
+              Punya pertanyaan? Kirim langsung email dibawah ini
             </p>
             <a
               href={`mailto:${email}`}
