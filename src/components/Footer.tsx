@@ -78,14 +78,6 @@ export default function Footer() {
             <p className="mb-4 text-sm leading-relaxed text-slate-500">
               Punya pertanyaan? Kirim langsung email dibawah ini
             </p>
-
-            <a
-              href={`mailto:${email}`}
-              className="inline-flex rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700"
-            >
-              Send Email
-            </a>
-
             <a
               href={`mailto:${email}`}
               className="mt-3 block text-sm font-medium text-emerald-700 transition hover:text-emerald-900"
