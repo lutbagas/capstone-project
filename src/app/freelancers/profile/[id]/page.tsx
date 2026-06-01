@@ -2,6 +2,7 @@ import ClientNavbar from "@/components/ClientNavbar";
 import Footer from "@/components/Footer";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import { requireAuth } from "@/lib/auth";
 
 type Props = {
   params: Promise<{
@@ -9,7 +10,17 @@ type Props = {
   }>;
 };
 
+function getSkills(skills?: string | null) {
+  if (!skills) return [];
+
+  return skills
+    .split(",")
+    .map((skill) => skill.trim())
+    .filter(Boolean);
+}
+
 export default async function FreelancerPublicProfilePage({ params }: Props) {
+  const authUser = await requireAuth(["client"]);
   const { id } = await params;
   const freelancerId = Number(id);
 
@@ -17,11 +28,15 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
     notFound();
   }
 
-  const client = await prisma.user.findFirst({
+  const client = await prisma.user.findUnique({
     where: {
-      role: "client",
+      id: authUser.id,
     },
   });
+
+  if (!client || client.role !== "client") {
+    notFound();
+  }
 
   const freelancer = await prisma.user.findFirst({
     where: {
@@ -46,57 +61,41 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
   }
 
   const profile = freelancer.freelancerProfile;
+  const skills = getSkills(profile.skills);
 
-  const skills = (profile.skills || "")
-    .split(",")
-    .map((skill) => skill.trim())
-    .filter(Boolean);
-
-  // normalize portfolios for backward compatibility (legacy `image` field)
-  profile.portfolios = profile.portfolios.map((p: any) => ({
-    ...p,
-    imageUrl: p.imageUrl || p.image || null,
-    imagePublicId: p.imagePublicId || null,
+  const portfolios = profile.portfolios.map((portfolio: any) => ({
+    ...portfolio,
+    imageUrl: portfolio.imageUrl || portfolio.image || null,
+    imagePublicId: portfolio.imagePublicId || null,
   }));
 
+  const whatsappNumber = profile.phone?.replace(/\D/g, "");
+  const whatsappMessage = encodeURIComponent(
+    `Halo ${freelancer.name || "Freelancer"}, saya tertarik berdiskusi tentang project website.`
+  );
+
   return (
-    <main className="min-h-screen bg-slate-50">
-      {client && (
-        <ClientNavbar
-          userName={client.name || "Client"}
-          userId={client.id}
-        />
-      )}
+    <main className="min-h-screen bg-[#F5FBF8] font-sans text-slate-950">
+      <ClientNavbar userName={client.name || "Client"} userId={client.id} />
 
-      <section className="mx-auto max-w-7xl px-6 py-10">
-        <div className="overflow-hidden rounded-[30px] bg-white shadow-xl">
-          <div className="bg-linear-to-r from-emerald-600 via-violet-600 to-purple-600 px-8 py-12 text-white">
-            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-              <div className="flex items-center gap-5">
-                <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white/40 bg-white/20 text-4xl font-bold backdrop-blur-md">
-                  {freelancer.name?.charAt(0) || "F"}
-                </div>
+      <section className="px-6 py-10 md:px-10">
+        <div className="mx-auto grid max-w-300 items-center gap-10 lg:grid-cols-[1fr_0.9fr]">
+          <div>
+            <p className="mb-5 inline-block rounded-full border border-emerald-100 bg-white px-5 py-2 text-sm font-medium text-emerald-700 shadow-sm">
+              Freelancer Profile
+            </p>
 
-                <div>
-                  <p className="text-sm text-emerald-100">Freelancer Profile</p>
+            <h1 className="font-serif text-[48px] font-bold leading-[1.05] tracking-[-2px] text-slate-950 md:text-[72px]">
+              {freelancer.name || "Freelancer"}
+            </h1>
 
-                  <h1 className="mt-1 text-4xl font-bold">
-                    {freelancer.name || "Freelancer"}
-                  </h1>
+            <p className="mt-4 text-lg font-semibold text-emerald-700">
+              {profile.title || "Professional Web Developer"}
+            </p>
 
-                  <p className="mt-2 text-lg text-emerald-100">
-                    {profile.title || "Professional Freelancer"}
-                  </p>
-                </div>
-              </div>
-
-              <div className="rounded-2xl bg-white/20 px-5 py-3 text-sm font-medium capitalize backdrop-blur-md">
-                {profile.visibility}
-              </div>
-            </div>
-
-            <p className="mt-8 max-w-3xl text-emerald-50">
-              {profile.bio || "Freelancer ini belum menambahkan bio."}
+            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600">
+              {profile.bio ||
+                "Freelancer ini belum menambahkan bio. Kamu tetap bisa melihat skill, portfolio, dan informasi kontak yang tersedia."}
             </p>
 
             <div className="mt-6 flex flex-wrap gap-2">
@@ -104,145 +103,247 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
                 skills.map((skill) => (
                   <span
                     key={skill}
-                    className="rounded-full bg-white/20 px-4 py-1 text-sm backdrop-blur-md"
+                    className="rounded-full border border-emerald-100 bg-white px-4 py-2 text-sm font-medium text-emerald-700 shadow-sm"
                   >
                     {skill}
                   </span>
                 ))
               ) : (
-                <span className="rounded-full bg-white/20 px-4 py-1 text-sm">
-                  Belum ada skill
+                <span className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-500 shadow-sm">
+                  Skill belum diisi
                 </span>
               )}
             </div>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              {whatsappNumber ? (
+                <a
+                  href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-full bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(16,185,129,0.24)] transition hover:bg-emerald-700"
+                >
+                  Chat via WhatsApp
+                </a>
+              ) : (
+                <button
+                  disabled
+                  className="cursor-not-allowed rounded-full bg-slate-200 px-6 py-3 text-sm font-semibold text-slate-500"
+                >
+                  WhatsApp belum tersedia
+                </button>
+              )}
+
+              <a
+                href={`mailto:${freelancer.email}`}
+                className="rounded-full border border-emerald-200 bg-white px-6 py-3 text-sm font-semibold text-emerald-700 transition hover:border-emerald-500"
+              >
+                Send Email
+              </a>
+            </div>
+
+            <div className="mt-10 grid max-w-xl grid-cols-3 gap-3">
+              <div className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
+                <h3 className="text-2xl font-bold text-slate-950">
+                  {skills.length}
+                </h3>
+                <p className="mt-1 text-xs text-slate-500">Skills</p>
+              </div>
+
+              <div className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
+                <h3 className="text-2xl font-bold text-slate-950">
+                  {portfolios.length}
+                </h3>
+                <p className="mt-1 text-xs text-slate-500">Projects</p>
+              </div>
+
+              <div className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
+                <h3 className="text-2xl font-bold capitalize text-slate-950">
+                  {profile.visibility}
+                </h3>
+                <p className="mt-1 text-xs text-slate-500">Visibility</p>
+              </div>
+            </div>
           </div>
 
-          <div className="grid gap-5 p-8 md:grid-cols-3">
-            <div className="rounded-3xl bg-slate-50 p-6">
-              <p className="text-sm text-slate-500">Email</p>
-              <h2 className="mt-1 break-all text-lg font-bold text-slate-800">
-                {freelancer.email}
-              </h2>
-            </div>
+          <div className="relative overflow-hidden rounded-4xl border border-emerald-100 bg-white p-6 shadow-[0_25px_70px_rgba(16,185,129,0.18)]">
+            <div className="absolute right-0 top-0 h-40 w-40 rounded-bl-full bg-emerald-100" />
+            <div className="absolute bottom-0 left-0 h-32 w-32 rounded-tr-full bg-emerald-50" />
 
-            <div className="rounded-3xl bg-slate-50 p-6">
-              <p className="text-sm text-slate-500">Phone</p>
-              <h2 className="mt-1 text-lg font-bold text-slate-800">
-                {profile.phone || "-"}
-              </h2>
-            </div>
+            <div className="relative">
+              <div className="flex h-65 items-center justify-center rounded-[26px] bg-linear-to-br from-emerald-100 via-slate-100 to-white">
+                <div className="flex h-28 w-28 items-center justify-center rounded-full bg-emerald-600 font-serif text-5xl font-bold text-white shadow-lg">
+                  {(freelancer.name || "F").charAt(0).toUpperCase()}
+                </div>
+              </div>
 
-            <div className="rounded-3xl bg-slate-50 p-6">
-              <p className="text-sm text-slate-500">Portfolio</p>
-              <h2 className="mt-1 text-2xl font-bold text-slate-800">
-                {profile.portfolios.length} Project
-              </h2>
+              <div className="mt-6 rounded-3xl border border-emerald-100 bg-[#F5FBF8] p-5">
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[3px] text-emerald-600">
+                      Profile Summary
+                    </p>
+
+                    <h2 className="mt-2 font-serif text-3xl font-bold text-slate-950">
+                      {freelancer.name || "Freelancer"}
+                    </h2>
+
+                    <p className="mt-2 text-sm font-semibold text-emerald-700">
+                      {profile.title || "Professional Freelancer"}
+                    </p>
+                  </div>
+
+                  <span className="rounded-full border border-emerald-100 bg-white px-4 py-2 text-xs font-semibold capitalize text-emerald-700 shadow-sm">
+                    {profile.visibility}
+                  </span>
+                </div>
+
+                <div className="mt-5 grid gap-3">
+                  <div className="rounded-2xl bg-white p-4">
+                    <p className="text-xs font-medium text-slate-500">Email</p>
+                    <a
+                      href={`mailto:${freelancer.email}`}
+                      className="mt-1 block break-all text-sm font-semibold text-emerald-700 hover:underline"
+                    >
+                      {freelancer.email}
+                    </a>
+                  </div>
+
+                  <div className="rounded-2xl bg-white p-4">
+                    <p className="text-xs font-medium text-slate-500">Phone</p>
+                    <p className="mt-1 text-sm font-semibold text-slate-800">
+                      {profile.phone || "Belum tersedia"}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </section>
 
-        <div className="mt-8 rounded-[30px] bg-white p-8 shadow-sm">
-          <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+      <section className="px-6 py-10 md:px-10">
+        <div className="mx-auto max-w-300">
+          <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-sm font-medium text-emerald-600">
+              <p className="text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
                 Selected Works
               </p>
-              <h2 className="mt-1 text-3xl font-bold text-slate-900">
-                Portfolio
+
+              <h2 className="mt-2 font-serif text-4xl font-bold text-slate-950">
+                Portfolio Projects
               </h2>
+
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-500">
+                Project yang pernah dikerjakan freelancer dan bisa menjadi bahan
+                pertimbangan sebelum menghubungi.
+              </p>
             </div>
 
-            <p className="text-sm text-slate-500">
-              Project yang pernah dikerjakan freelancer.
-            </p>
+            <div className="rounded-full border border-emerald-100 bg-white px-5 py-2 text-sm font-semibold text-emerald-700 shadow-sm">
+              {portfolios.length} Project
+            </div>
           </div>
 
-          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {profile.portfolios.length > 0 ? (
-              profile.portfolios.map((portfolio) => (
+          {portfolios.length > 0 ? (
+            <div className="grid gap-4.5 md:grid-cols-2 lg:grid-cols-3">
+              {portfolios.map((portfolio) => (
                 <article
                   key={portfolio.id}
-                  className="overflow-hidden rounded-3xl border border-slate-100 bg-slate-50"
+                  className="group overflow-hidden rounded-3xl border border-emerald-100 bg-white p-3 shadow-[0_10px_25px_rgba(16,185,129,0.08)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_24px_50px_rgba(16,185,129,0.18)]"
                 >
                   {portfolio.imageUrl ? (
                     <img
                       src={portfolio.imageUrl}
                       alt={portfolio.projectTitle || "Portfolio image"}
-                      className="h-48 w-full object-cover"
+                      className="h-48 w-full rounded-[18px] object-cover"
                     />
                   ) : (
-                    <div className="flex h-48 w-full items-center justify-center bg-slate-200 text-sm text-slate-500">
+                    <div className="flex h-48 w-full items-center justify-center rounded-[18px] bg-linear-to-br from-emerald-100 via-slate-100 to-white text-sm font-medium text-slate-500">
                       No Image
                     </div>
                   )}
 
-                  <div className="p-5">
-                    <h3 className="text-lg font-bold text-slate-900">
+                  <div className="p-3">
+                    <h3 className="font-serif text-xl font-bold text-slate-950">
                       {portfolio.projectTitle || "Untitled Project"}
                     </h3>
 
-                    <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-600">
+                    <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-500">
                       {portfolio.projectDescription ||
                         "Belum ada deskripsi project."}
                     </p>
 
-                    {portfolio.projectLink && (
+                    {portfolio.projectLink ? (
                       <a
                         href={portfolio.projectLink}
                         target="_blank"
                         rel="noreferrer"
-                        className="mt-4 inline-block rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                        className="mt-5 inline-flex rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700"
                       >
                         Visit Project
                       </a>
+                    ) : (
+                      <p className="mt-5 text-sm font-medium text-slate-400">
+                        Link project belum tersedia
+                      </p>
                     )}
                   </div>
                 </article>
-              ))
-            ) : (
-              <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-10 text-center md:col-span-2 lg:col-span-3">
-                <h3 className="text-lg font-bold text-slate-800">
-                  Belum ada portfolio
-                </h3>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-[28px] border border-dashed border-emerald-200 bg-white px-6 py-14 text-center shadow-[0_10px_25px_rgba(16,185,129,0.08)]">
+              <h3 className="font-serif text-2xl font-bold text-slate-950">
+                Belum ada portfolio
+              </h3>
 
-                <p className="mt-2 text-sm text-slate-500">
-                  Freelancer ini belum menambahkan project.
-                </p>
-              </div>
-            )}
-          </div>
+              <p className="mx-auto mt-2 max-w-md text-sm leading-7 text-slate-500">
+                Freelancer ini belum menambahkan project. Kamu masih bisa
+                menghubungi freelancer melalui email atau WhatsApp jika tersedia.
+              </p>
+            </div>
+          )}
         </div>
+      </section>
 
-        <div className="mt-8 rounded-[30px] bg-white p-8 shadow-sm">
-          <div className="flex flex-col gap-4 rounded-3xl border border-emerald-100 bg-emerald-50 p-6 text-slate-900 md:flex-row md:items-center md:justify-between">
+      <section className="px-6 pb-16 md:px-10">
+        <div className="mx-auto max-w-300 rounded-[30px] border border-emerald-100 bg-white p-6 shadow-[0_18px_45px_rgba(16,185,129,0.1)] md:p-8">
+          <div className="flex flex-col gap-5 rounded-3xl bg-emerald-50 p-6 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
-                Kontak WhatsApp
+                Contact Freelancer
               </p>
-              <h2 className="mt-2 text-2xl font-bold">
-                Hubungi freelancer via WhatsApp
+
+              <h2 className="mt-2 font-serif text-3xl font-bold text-slate-950">
+                Tertarik bekerja sama?
               </h2>
+
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600">
-                Klik tombol untuk langsung mengirim pesan WhatsApp ke freelancer.
+                Hubungi freelancer untuk diskusi kebutuhan project, estimasi
+                pengerjaan, dan detail kerja sama.
               </p>
             </div>
 
-            {profile.phone ? (
+            <div className="flex flex-wrap gap-3">
               <a
-                href={`https://wa.me/${profile.phone.replace(/\D/g, "")}?text=${encodeURIComponent(
-                  `Halo ${freelancer.name || "Freelancer"}, saya tertarik berdiskusi tentang proyek Anda.`,
-                )}`}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex rounded-full bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                href={`mailto:${freelancer.email}`}
+                className="inline-flex rounded-full border border-emerald-200 bg-white px-5 py-3 text-sm font-semibold text-emerald-700 transition hover:border-emerald-500"
               >
-                Chat via WhatsApp
+                Send Email
               </a>
-            ) : (
-              <div className="rounded-full border border-rose-300 bg-rose-50 px-5 py-3 text-sm font-semibold text-rose-700">
-                Nomor WhatsApp belum tersedia
-              </div>
-            )}
+
+              {whatsappNumber && (
+                <a
+                  href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex rounded-full bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                >
+                  Chat WhatsApp
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </section>
