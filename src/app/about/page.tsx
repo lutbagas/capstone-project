@@ -19,21 +19,21 @@ const teamMembers: TeamMember[] = [
   {
     name: "Muhammad Sauqi H",
     role: "Frontend Developer",
-    image: "/images/frontend.png",
+    image: "/images/sauqi.jpg",
     description:
       "Bertanggung jawab membuat tampilan website, layout halaman, komponen UI, dan memastikan pengalaman pengguna terlihat rapi serta nyaman digunakan.",
   },
   {
     name: "Yafi Ariella W",
     role: "Backend Developer",
-    image: "/images/backend-developer.jpg",
+    image: "/images/yafi.jpg",
     description:
       "Bertanggung jawab membuat database, API, autentikasi, validasi data, dan logic sistem agar aplikasi berjalan dengan baik.",
   },
   {
     name: "Maulvi Azami",
     role: "System Analyst",
-    image: "/images/system-analyst.jpg",
+    image: "/images/maulvi.png",
     description:
       "Bertanggung jawab menganalisis kebutuhan sistem, menyusun alur proses, membuat rancangan fitur, dan memastikan solusi yang dibuat sesuai kebutuhan pengguna.",
   },
