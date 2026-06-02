@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 type Role = "admin" | "freelancer" | "client";
-type Visibility = "public" | "limited";
 
 type TokenPayload = {
   role?: Role;
@@ -19,35 +18,16 @@ type ManagedUser = {
   role: Role;
   createdAt: string;
   updatedAt: string;
-  freelancerProfile: {
-    id: number;
-    title: string | null;
-    bio: string | null;
-    skills: string | null;
-    phone: string | null;
-    visibility: Visibility;
-    updatedAt: string;
-  } | null;
 };
 
 type DashboardForm = {
   name: string;
-  title: string;
-  bio: string;
-  skills: string;
-  phone: string;
-  visibility: Visibility;
   password: string;
   confirmPassword: string;
 };
 
 const emptyForm: DashboardForm = {
   name: "",
-  title: "",
-  bio: "",
-  skills: "",
-  phone: "",
-  visibility: "public",
   password: "",
   confirmPassword: "",
 };
@@ -64,11 +44,6 @@ function toDate(value?: string | null) {
 function buildForm(user: ManagedUser): DashboardForm {
   return {
     name: user.name || "",
-    title: user.freelancerProfile?.title || "",
-    bio: user.freelancerProfile?.bio || "",
-    skills: user.freelancerProfile?.skills || "",
-    phone: user.freelancerProfile?.phone || "",
-    visibility: user.freelancerProfile?.visibility || "public",
     password: "",
     confirmPassword: "",
   };
@@ -119,14 +94,14 @@ function clearStoredAuthToken() {
 
 function roleBadge(role: Role) {
   if (role === "admin") {
-    return "bg-red-50 text-red-600 border-red-100";
+    return "border-red-100 bg-red-50 text-red-600";
   }
 
   if (role === "freelancer") {
-    return "bg-emerald-50 text-emerald-700 border-emerald-100";
+    return "border-emerald-100 bg-emerald-50 text-emerald-700";
   }
 
-  return "bg-blue-50 text-blue-700 border-blue-100";
+  return "border-blue-100 bg-blue-50 text-blue-700";
 }
 
 export default function AdminDashboardManager() {
@@ -155,12 +130,8 @@ export default function AdminDashboardManager() {
     setCheckingAdmin(false);
   }, [router]);
 
-  const profileUpdatedAt = useMemo(() => {
+  const userUpdatedAt = useMemo(() => {
     if (!user) return "-";
-
-    if (user.role === "freelancer") {
-      return toDate(user.freelancerProfile?.updatedAt);
-    }
 
     return toDate(user.updatedAt);
   }, [user]);
@@ -230,8 +201,6 @@ export default function AdminDashboardManager() {
     setLoadingSave(true);
 
     try {
-      const { confirmPassword: _confirmPassword, ...payload } = form;
-
       const res = await fetch("/api/admin/dashboard", {
         method: "PATCH",
         headers: {
@@ -240,7 +209,7 @@ export default function AdminDashboardManager() {
         },
         body: JSON.stringify({
           email: user.email,
-          ...payload,
+          name: form.name,
           password,
         }),
       });
@@ -248,13 +217,13 @@ export default function AdminDashboardManager() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Gagal update dashboard pengguna");
+        setError(data.error || "Gagal update akun pengguna");
         return;
       }
 
       setUser(data.user);
       setForm(buildForm(data.user));
-      setMessage(data.message || "Dashboard pengguna berhasil diupdate.");
+      setMessage(data.message || "Akun pengguna berhasil diupdate.");
     } catch (err) {
       console.error(err);
       setError("Server error");
@@ -263,11 +232,7 @@ export default function AdminDashboardManager() {
     }
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
@@ -311,7 +276,7 @@ export default function AdminDashboardManager() {
 
   return (
     <main className="min-h-screen bg-[#F5FBF8] px-6 py-8 font-sans text-slate-950 md:px-10">
-      <div className="mx-auto max-w-300">
+      <div className="mx-auto max-w-[1200px]">
         <nav className="mb-8 flex items-center justify-between rounded-[20px] border border-emerald-100 bg-white/85 px-8 py-3 shadow-[0_10px_30px_rgba(16,185,129,0.12)] backdrop-blur-md">
           <Link
             href="/"
@@ -345,13 +310,12 @@ export default function AdminDashboardManager() {
             </p>
 
             <h1 className="font-serif text-[48px] font-bold leading-[1.05] tracking-[-2px] text-slate-950 md:text-[68px]">
-              Kelola Data Pengguna InfoWebLancers
+              Kelola Akun Pengguna InfoWebLancers
             </h1>
 
             <p className="mt-6 max-w-2xl text-base leading-8 text-slate-600">
-              Cari akun berdasarkan email, lalu update informasi akun,
-              password, dan data profile freelancer jika pengguna tersebut
-              memiliki role freelancer.
+              Cari akun berdasarkan email, lalu admin dapat mengubah nama akun
+              dan password pengguna tanpa mengubah data profile freelancer.
             </p>
 
             <div className="mt-10 grid max-w-xl grid-cols-3 gap-3">
@@ -366,14 +330,14 @@ export default function AdminDashboardManager() {
               </div>
 
               <div className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
-                <h3 className="text-2xl font-bold text-slate-950">Edit</h3>
-                <p className="mt-1 text-xs text-slate-500">Update data</p>
+                <h3 className="text-2xl font-bold text-slate-950">Akun</h3>
+                <p className="mt-1 text-xs text-slate-500">Nama & password</p>
               </div>
             </div>
           </div>
 
-          <div className="rounded-4xl border border-emerald-100 bg-white p-6 shadow-[0_25px_70px_rgba(16,185,129,0.18)]">
-            <div className="rounded-[26px] bg-linear-to-br from-emerald-100 via-slate-100 to-white p-6">
+          <div className="rounded-[32px] border border-emerald-100 bg-white p-6 shadow-[0_25px_70px_rgba(16,185,129,0.18)]">
+            <div className="rounded-[26px] bg-gradient-to-br from-emerald-100 via-slate-100 to-white p-6">
               <p className="text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
                 Search User
               </p>
@@ -473,7 +437,7 @@ export default function AdminDashboardManager() {
                     Update terakhir
                   </p>
                   <p className="mt-1 font-semibold text-slate-900">
-                    {profileUpdatedAt}
+                    {userUpdatedAt}
                   </p>
                 </div>
               </div>
@@ -486,15 +450,16 @@ export default function AdminDashboardManager() {
               <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
                 <div>
                   <p className="text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
-                    Edit User
+                    Edit Account
                   </p>
 
                   <h2 className="mt-2 font-serif text-3xl font-bold text-slate-950">
-                    Update Dashboard Pengguna
+                    Update Akun Pengguna
                   </h2>
 
                   <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-500">
-                    Perubahan akan disimpan ke akun pengguna yang sedang dipilih.
+                    Admin hanya dapat mengubah nama akun dan password. Data
+                    freelancer tidak akan ikut berubah.
                   </p>
                 </div>
 
@@ -512,6 +477,7 @@ export default function AdminDashboardManager() {
                   <label className="mb-2 block text-sm font-semibold text-slate-700">
                     Nama
                   </label>
+
                   <input
                     name="name"
                     value={form.name}
@@ -525,6 +491,7 @@ export default function AdminDashboardManager() {
                   <label className="mb-2 block text-sm font-semibold text-slate-700">
                     Role
                   </label>
+
                   <input
                     value={user.role}
                     disabled
@@ -536,6 +503,7 @@ export default function AdminDashboardManager() {
                   <label className="mb-2 block text-sm font-semibold text-slate-700">
                     Password Baru
                   </label>
+
                   <input
                     type="password"
                     name="password"
@@ -550,6 +518,7 @@ export default function AdminDashboardManager() {
                   <label className="mb-2 block text-sm font-semibold text-slate-700">
                     Konfirmasi Password
                   </label>
+
                   <input
                     type="password"
                     name="confirmPassword"
@@ -560,102 +529,6 @@ export default function AdminDashboardManager() {
                   />
                 </div>
               </div>
-
-              {user.role === "freelancer" ? (
-                <div className="mt-8 rounded-[26px] border border-emerald-100 bg-[#F5FBF8] p-5 md:p-6">
-                  <div className="mb-6">
-                    <p className="text-sm font-semibold uppercase tracking-[3px] text-emerald-600">
-                      Freelancer Profile
-                    </p>
-
-                    <h3 className="mt-2 font-serif text-2xl font-bold text-slate-950">
-                      Data Profile Freelancer
-                    </h3>
-                  </div>
-
-                  <div className="grid gap-5 md:grid-cols-2">
-                    <div>
-                      <label className="mb-2 block text-sm font-semibold text-slate-700">
-                        Title
-                      </label>
-                      <input
-                        name="title"
-                        value={form.title}
-                        onChange={handleChange}
-                        placeholder="Contoh: Frontend Developer"
-                        className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-500"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="mb-2 block text-sm font-semibold text-slate-700">
-                        Phone
-                      </label>
-                      <input
-                        name="phone"
-                        value={form.phone}
-                        onChange={handleChange}
-                        placeholder="Nomor WhatsApp atau telepon"
-                        className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-500"
-                      />
-                    </div>
-
-                    <div className="md:col-span-2">
-                      <label className="mb-2 block text-sm font-semibold text-slate-700">
-                        Skills
-                      </label>
-                      <input
-                        name="skills"
-                        value={form.skills}
-                        onChange={handleChange}
-                        placeholder="React, Next.js, Prisma"
-                        className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-500"
-                      />
-                    </div>
-
-                    <div className="md:col-span-2">
-                      <label className="mb-2 block text-sm font-semibold text-slate-700">
-                        Bio
-                      </label>
-                      <textarea
-                        name="bio"
-                        value={form.bio}
-                        onChange={handleChange}
-                        rows={5}
-                        placeholder="Deskripsi singkat profile freelancer"
-                        className="w-full resize-none rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-500"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="mb-2 block text-sm font-semibold text-slate-700">
-                        Visibility
-                      </label>
-                      <select
-                        name="visibility"
-                        value={form.visibility}
-                        onChange={handleChange}
-                        className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-500"
-                      >
-                        <option value="public">Public</option>
-                        <option value="limited">Limited</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="mt-8 rounded-3xl border border-dashed border-emerald-200 bg-emerald-50/60 p-6">
-                  <h3 className="font-serif text-2xl font-bold text-slate-950">
-                    User ini bukan freelancer
-                  </h3>
-
-                  <p className="mt-2 text-sm leading-7 text-slate-500">
-                    Form profile freelancer hanya muncul untuk user dengan role
-                    freelancer. Untuk client atau admin, kamu tetap bisa
-                    mengubah nama dan password.
-                  </p>
-                </div>
-              )}
             </form>
           </section>
         ) : (
