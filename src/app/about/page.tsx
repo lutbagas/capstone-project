@@ -12,7 +12,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Lutfi Bagas W",
     role: "Project Manager",
-    image: "/images/lutfi.jpeg",
+    image: "/images/lutfi2.jpeg",
     description:
       "Bertanggung jawab mengatur alur kerja tim, membagi tugas, memantau progress project, dan memastikan pengembangan InfoWebLancers berjalan sesuai rencana.",
   },
