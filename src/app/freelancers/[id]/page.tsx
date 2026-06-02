@@ -73,6 +73,8 @@ export default async function FreelancerDashboardPage({ params }: Props) {
     title: profile.title,
     bio: profile.bio,
     skills: profile.skills,
+    avatarUrl: profile.avatarUrl || null,
+    avatarPublicId: profile.avatarPublicId || null,
     phone: profile.phone,
     visibility: profile.visibility,
     user,
@@ -102,12 +104,6 @@ export default async function FreelancerDashboardPage({ params }: Props) {
             </div>
 
             <div className="flex flex-col gap-3 md:flex-row md:items-center">
-              <Link
-                href="/freelancers"
-                className="inline-flex rounded-full border border-emerald-600 bg-white px-4 py-2 text-sm font-medium text-emerald-700 transition hover:bg-emerald-50"
-              >
-                Lihat Listing
-              </Link>
               <Link
                 href="/api/auth/logout"
                 className="inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-emerald-600 hover:text-emerald-700"

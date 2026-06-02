@@ -172,8 +172,18 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
 
             <div className="relative">
               <div className="flex h-65 items-center justify-center rounded-[26px] bg-linear-to-br from-emerald-100 via-slate-100 to-white">
-                <div className="flex h-28 w-28 items-center justify-center rounded-full bg-emerald-600 font-serif text-5xl font-bold text-white shadow-lg">
-                  {(freelancer.name || "F").charAt(0).toUpperCase()}
+                <div>
+                  {profile.avatarUrl ? (
+                    <img
+                      src={profile.avatarUrl}
+                      alt={freelancer.name || "Avatar"}
+                      className="h-28 w-28 rounded-full object-cover shadow-lg"
+                    />
+                  ) : (
+                    <div className="flex h-28 w-28 items-center justify-center rounded-full bg-emerald-600 font-serif text-5xl font-bold text-white shadow-lg">
+                      {(freelancer.name || "F").charAt(0).toUpperCase()}
+                    </div>
+                  )}
                 </div>
               </div>
 

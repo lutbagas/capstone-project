@@ -39,6 +39,8 @@ model FreelancerProfile {
   bio       String?
   skills    String?
   phone     String?
+  avatarUrl String?
+  avatarPublicId String?
   visibility Visibility @default(public)
 
   createdAt DateTime @default(now())

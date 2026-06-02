@@ -27,6 +27,8 @@ type Profile = {
     role: string;
   };
   portfolios: Portfolio[];
+  avatarUrl?: string | null;
+  avatarPublicId?: string | null;
 };
 
 type Props = {
@@ -58,6 +60,11 @@ export default function FreelancerProfileEditor({ profile }: Props) {
 
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [loadingPortfolio, setLoadingPortfolio] = useState(false);
+  const [loadingAvatar, setLoadingAvatar] = useState(false);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(
+    profile.avatarUrl || null
+  );
 
   const skillList = form.skills
     .split(",")
@@ -88,6 +95,75 @@ export default function FreelancerProfileEditor({ profile }: Props) {
       ...portfolioForm,
       [e.target.name]: (e.target as HTMLInputElement).value,
     });
+  };
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setAvatarFile(file);
+
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setAvatarPreview(url);
+    } else {
+      setAvatarPreview(profile.avatarUrl || null);
+    }
+  };
+
+  const handleUploadAvatar = async () => {
+    if (!avatarFile) return alert("Pilih file gambar terlebih dahulu");
+
+    setLoadingAvatar(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("avatar", avatarFile);
+
+      const res = await fetch(`/api/freelancers/${profile.userId}/avatar`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "Gagal upload avatar");
+        return;
+      }
+
+      alert("Avatar berhasil diupload");
+      setAvatarFile(null);
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      alert("Server error saat upload avatar");
+    } finally {
+      setLoadingAvatar(false);
+    }
+  };
+
+  const handleRemoveAvatar = async () => {
+    const confirmDelete = confirm("Yakin ingin menghapus avatar?");
+    if (!confirmDelete) return;
+
+    try {
+      const res = await fetch(`/api/freelancers/${profile.userId}/avatar`, {
+        method: "DELETE",
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "Gagal menghapus avatar");
+        return;
+      }
+
+      alert("Avatar berhasil dihapus");
+      setAvatarPreview(null);
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      alert("Server error saat menghapus avatar");
+    }
   };
 
   const handleUpdateProfile = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -196,11 +272,29 @@ export default function FreelancerProfileEditor({ profile }: Props) {
           <div>
             <p className="text-sm text-emerald-50">Freelancer Dashboard</p>
 
-            <h1 className="mt-2 text-3xl font-bold">
-              Halo, {profile.user.name || "Freelancer"}
-            </h1>
+            <div className="mt-2 flex items-center gap-4">
+              <div className="relative">
+                {avatarPreview ? (
+                  <img
+                    src={avatarPreview}
+                    alt={profile.user.name || "Avatar"}
+                    className="h-20 w-20 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-emerald-600 font-serif text-2xl font-bold text-white">
+                    {profile.user.name?.charAt(0) || "F"}
+                  </div>
+                )}
+              </div>
 
-            <p className="mt-2 text-emerald-50">{profile.user.email}</p>
+              <div>
+                <h1 className="text-3xl font-bold">
+                  Halo, {profile.user.name || "Freelancer"}
+                </h1>
+
+                <p className="mt-1 text-emerald-50">{profile.user.email}</p>
+              </div>
+            </div>
 
             <div className="mt-6">
               <h2 className="text-2xl font-bold">
@@ -243,15 +337,6 @@ export default function FreelancerProfileEditor({ profile }: Props) {
 
         <div className="mt-8 flex flex-wrap gap-3">
           <a
-            href={`/freelancers/profile/${profile.userId}`}
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
-          >
-            Preview Public Profile
-          </a>
-
-          <a
             href="#edit-profile"
             className="rounded-2xl bg-emerald-800/35 px-5 py-3 text-sm font-semibold text-white ring-1 ring-white/20 transition hover:bg-emerald-950/50"
           >
@@ -264,6 +349,41 @@ export default function FreelancerProfileEditor({ profile }: Props) {
           >
             Upload Portfolio
           </a>
+
+          <div className="flex items-center gap-2">
+            <input
+              id="avatar-input"
+              name="avatar"
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarChange}
+              className="hidden"
+            />
+
+            <label
+              htmlFor="avatar-input"
+              className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50 cursor-pointer"
+            >
+              Pilih Foto
+            </label>
+
+            <button
+              type="button"
+              onClick={handleUploadAvatar}
+              disabled={loadingAvatar}
+              className="rounded-2xl bg-emerald-800 px-5 py-3 text-sm font-semibold text-white transition hover:bg-green-900 disabled:opacity-50"
+            >
+              {loadingAvatar ? "Uploading..." : "Upload Foto"}
+            </button>
+
+            <button
+              type="button"
+              onClick={handleRemoveAvatar}
+              className="rounded-2xl bg-red-50 px-5 py-3 text-sm font-semibold text-red-600 transition hover:bg-red-100"
+            >
+              Hapus Foto
+            </button>
+          </div>
         </div>
       </div>
 
