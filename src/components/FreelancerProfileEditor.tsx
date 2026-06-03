@@ -61,10 +61,16 @@ export default function FreelancerProfileEditor({ profile }: Props) {
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [loadingPortfolio, setLoadingPortfolio] = useState(false);
   const [loadingAvatar, setLoadingAvatar] = useState(false);
+  const [loadingPassword, setLoadingPassword] = useState(false);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(
     profile.avatarUrl || null
   );
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
 
   const skillList = form.skills
     .split(",")
@@ -163,6 +169,49 @@ export default function FreelancerProfileEditor({ profile }: Props) {
     } catch (error) {
       console.error(error);
       alert("Server error saat menghapus avatar");
+    }
+  };
+
+  const handlePasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setPasswordForm({
+      ...passwordForm,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleChangePassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoadingPassword(true);
+
+    try {
+      const res = await fetch("/api/auth/change-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(passwordForm),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "Gagal mengubah password");
+        return;
+      }
+
+      alert("Password berhasil diubah");
+      setPasswordForm({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+    } catch (error) {
+      console.error(error);
+      alert("Server error");
+    } finally {
+      setLoadingPassword(false);
     }
   };
 
@@ -743,6 +792,80 @@ export default function FreelancerProfileEditor({ profile }: Props) {
               </div>
             )}
           </div>
+        </div>
+      </div>
+
+      <div className="mt-8">
+        <div className="rounded-3xl bg-white p-6 shadow-sm">
+          <div>
+            <p className="text-sm font-medium text-red-600">
+              Security
+            </p>
+            <h2 className="text-xl font-bold text-slate-800">
+              Ubah Password
+            </h2>
+            <p className="mt-2 text-sm text-slate-500">
+              Perbarui password akun Anda untuk keamanan lebih baik.
+            </p>
+          </div>
+
+          <form onSubmit={handleChangePassword} className="mt-6 space-y-5">
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Password Saat Ini
+              </label>
+              <input
+                name="currentPassword"
+                type="password"
+                value={passwordForm.currentPassword}
+                onChange={handlePasswordChange}
+                placeholder="Masukkan password saat ini"
+                className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-100"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Password Baru
+              </label>
+              <input
+                name="newPassword"
+                type="password"
+                value={passwordForm.newPassword}
+                onChange={handlePasswordChange}
+                placeholder="Masukkan password baru (minimal 6 karakter)"
+                className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-100"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Konfirmasi Password Baru
+              </label>
+              <input
+                name="confirmPassword"
+                type="password"
+                value={passwordForm.confirmPassword}
+                onChange={handlePasswordChange}
+                placeholder="Konfirmasi password baru"
+                className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-100"
+              />
+            </div>
+
+            <div className="rounded-3xl border border-red-100 bg-red-50 p-5">
+              <p className="text-sm font-semibold text-red-800">
+                Pastikan password baru berbeda dengan yang sebelumnya.
+              </p>
+
+              <button
+                type="submit"
+                disabled={loadingPassword}
+                className="mt-4 rounded-2xl bg-red-600 px-6 py-3 font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+              >
+                {loadingPassword ? "Mengubah Password..." : "Ubah Password"}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </section>
