@@ -43,7 +43,7 @@ function Navbar() {
         <li>
           <Link
             href="/"
-            className="rounded-full bg-emerald-600 px-4 py-1.5 text-white shadow-sm"
+            className="transition duration-400 rounded-full hover:bg-green-600 px-3 py-1.5 hover:text-white shadow-sm"
           >
             Home
           </Link>
@@ -52,7 +52,7 @@ function Navbar() {
         <li>
           <a
             href="#services"
-            className="transition duration-300 hover:text-emerald-700"
+            className="transition duration-400 rounded-full hover:bg-green-600 px-3 py-1.5 hover:text-white shadow-sm"
           >
             Services
           </a>
@@ -61,7 +61,7 @@ function Navbar() {
         <li>
           <a
             href="#freelancers"
-            className="transition duration-300 hover:text-emerald-700"
+            className="transition duration-400 rounded-full hover:bg-green-600 px-3 py-1.5  hover:text-white shadow-sm"
           >
             Freelancers
           </a>
@@ -70,7 +70,7 @@ function Navbar() {
         <li>
           <a
             href="#contact"
-            className="transition duration-300 hover:text-emerald-700"
+            className="transition duration-400 rounded-full hover:bg-green-600 px-3 py-1.5 hover:text-white shadow-sm"
           >
             Contact
           </a>
