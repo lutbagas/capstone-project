@@ -156,13 +156,6 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
                 </h3>
                 <p className="mt-1 text-xs text-slate-500">Projects</p>
               </div>
-
-              <div className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
-                <h3 className="text-2xl font-bold capitalize text-slate-950">
-                  {profile.visibility}
-                </h3>
-                <p className="mt-1 text-xs text-slate-500">Visibility</p>
-              </div>
             </div>
           </div>
 
