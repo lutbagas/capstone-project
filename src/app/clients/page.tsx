@@ -65,12 +65,7 @@ function Hero({
               Cari Freelancer
             </a>
 
-            <Link
-              href="/clients/profile"
-              className="rounded-full border border-emerald-200 bg-white px-6 py-3 text-sm font-semibold text-emerald-700 transition hover:border-emerald-500"
-            >
-              Kelola Profile
-            </Link>
+            
           </div>
 
           <div className="mt-10 grid max-w-xl grid-cols-3 gap-3">

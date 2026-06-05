@@ -96,12 +96,7 @@ export default async function ClientProfilePage({ params }: Props) {
                 Cari Freelancer
               </Link>
 
-              <Link
-                href="/api/auth/logout"
-                className="rounded-full border border-red-200 bg-red-50 px-6 py-3 text-sm font-semibold text-red-600 transition hover:border-red-500 hover:bg-red-500 hover:text-white"
-              >
-                Logout
-              </Link>
+              
             </div>
 
             <div className="mt-10 grid max-w-xl grid-cols-3 gap-3">
