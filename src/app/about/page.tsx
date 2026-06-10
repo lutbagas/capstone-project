@@ -132,7 +132,7 @@ export default function AboutPage() {
               About Us
             </p>
 
-            <h1 className="font-serif text-[52px] font-bold leading-[1.05] tracking-[-2px] text-slate-950 md:text-[76px]">
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-5xl lg:text-5xl font-bold leading-[1.05] tracking-[-2px] text-slate-950 md:text-[76px]">
               Tim Pengembang InfoWebLancers
             </h1>
 
