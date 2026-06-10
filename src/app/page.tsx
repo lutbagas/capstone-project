@@ -31,10 +31,10 @@ function getSkillList(skills: string) {
 
 function Navbar() {
   return (
-    <nav className="sticky top-3 z-50 mx-auto mt-3 flex max-w-275 items-center justify-between rounded-[20px] border border-emerald-100 bg-white/85 px-8 py-3 text-slate-900 shadow-[0_10px_30px_rgba(16,185,129,0.12)] backdrop-blur-md">
+    <nav className="sticky top-3 z-50 mx-auto mt-3 flex max-w-275 items-center justify-between rounded-[20px] border border-emerald-100 bg-white/85 px-2 py-3 sm:px-8 md:px-8 lg:px-8 text-slate-900 shadow-[0_10px_30px_rgba(16,185,129,0.12)] backdrop-blur-md">
       <Link
         href="/"
-        className="font-serif text-[30px] font-bold tracking-tight text-emerald-700"
+        className="font-serif text-2xl sm:text-3xl md:text-3xl lg:text-3xl font-bold tracking-tight text-emerald-700"
       >
         InfoWebLancers
       </Link>
@@ -79,13 +79,13 @@ function Navbar() {
 
       <div className="flex items-center">
         <Link href="/login">
-          <button className="cursor-pointer rounded-full border border-emerald-600 px-4 py-2 text-sm font-medium text-emerald-700 transition-all duration-300 hover:bg-emerald-600 hover:text-white">
+          <button className="cursor-pointer rounded-full border border-emerald-600 px-2 sm:px-4 md:px-4 lg:px-4 py-2 text-sm font-medium text-emerald-700 transition-all duration-300 hover:bg-emerald-600 hover:text-white">
             Login
           </button>
         </Link>
 
         <Link href="/register">
-          <button className="ml-2.5 cursor-pointer rounded-full border border-emerald-600 bg-emerald-700 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-white hover:text-emerald-700">
+          <button className="ml-2.5 cursor-pointer rounded-full border border-emerald-600 bg-emerald-700 px-2 sm:px-4 md:4 lg:px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-white hover:text-emerald-700">
             Register
           </button>
         </Link>
