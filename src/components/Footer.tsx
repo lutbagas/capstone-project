@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export default function Footer() {
-  const email = "lutfi123456@gmail.com";
+  const email = "InfoWebLancers@gmail.com";
 
   return (
     <footer

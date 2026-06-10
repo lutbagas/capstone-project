@@ -346,7 +346,7 @@ function DeveloperCard({ data }: DeveloperCardProps) {
 }
 
 function Footer() {
-  const email = "lutfi123456@gmail.com";
+  const email = "InfoWebLancers@gmail.com";
 
   return (
     <footer
