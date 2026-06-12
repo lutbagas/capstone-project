@@ -355,3 +355,5 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
     </main>
   );
 }
+
+//version 1.0.0
