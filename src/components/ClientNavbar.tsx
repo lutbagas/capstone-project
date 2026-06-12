@@ -12,7 +12,7 @@ export default function ClientNavbar({ userName, userId }: Props) {
     <nav className="sticky top-3 z-50 mx-auto mt-3.5 flex max-w-275 items-center justify-between rounded-[20px] border border-emerald-100 bg-white/85 px-8 py-3 text-slate-900 shadow-[0_10px_30px_rgba(16,185,129,0.12)] backdrop-blur-md">
       <Link
         href="/clients"
-        className="font-serif text-[30px] font-bold tracking-tight text-emerald-700"
+        className="font-serif text-xl sm:text-3xl md:text-3xl lg:text-3xl font-bold tracking-tight text-emerald-700"
       >
         InfoWebLancers
       </Link>
@@ -56,14 +56,14 @@ export default function ClientNavbar({ userName, userId }: Props) {
 
         <Link
           href="/api/auth/logout"
-          className="rounded-full border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-600 transition duration-300 hover:border-red-500 hover:bg-red-500 hover:text-white"
+          className="rounded-full border border-red-200 bg-red-50 px-2 sm:px-4 md:px-4 lg:px-4 py-2 text-sm font-semibold text-red-600 transition duration-300 hover:border-red-500 hover:bg-red-500 hover:text-white"
         >
           Logout
         </Link>
 
         <Link
           href={`/clients/profile/${userId}`}
-          className="rounded-full border border-emerald-600 bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-white hover:text-emerald-600"
+          className="rounded-full border border-emerald-600 bg-emerald-600 px-2 sm:px-4 md:px-4 lg:px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-white hover:text-emerald-600"
         >
           Profile
         </Link>

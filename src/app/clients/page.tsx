@@ -70,19 +70,19 @@ function Hero({
 
           <div className="mt-10 grid max-w-xl grid-cols-3 gap-3">
             <div className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
-              <h3 className="text-2xl font-bold text-slate-950">
+              <h3 className="text-xl sm:text-2xl md:text-2xl lg:text-2xl font-bold text-slate-950">
                 {totalFreelancers}
               </h3>
               <p className="mt-1 text-xs text-slate-500">Freelancer</p>
             </div>
 
             <div className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
-              <h3 className="text-2xl font-bold text-slate-950">Client</h3>
+              <h3 className="text-xl sm:text-2xl md:text-2xl lg:text-2xl font-bold text-slate-950">Client</h3>
               <p className="mt-1 text-xs text-slate-500">Cari talent</p>
             </div>
 
             <div className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
-              <h3 className="text-2xl font-bold text-slate-950">Profile</h3>
+              <h3 className="text-xl sm:text-2xl md:text-2xl lg:text-2xl font-bold text-slate-950">Profile</h3>
               <p className="mt-1 text-xs text-slate-500">Bisa dilihat</p>
             </div>
           </div>
