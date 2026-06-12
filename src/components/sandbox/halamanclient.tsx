@@ -19,28 +19,6 @@ function getSkills(skills?: string | null) {
     .filter(Boolean);
 }
 
-function formatWhatsappNumber(phone?: string | null) {
-  if (!phone) return "";
-
-  const rawPhone = phone.replace(/\D/g, "");
-
-  if (!rawPhone) return "";
-
-  if (rawPhone.startsWith("0")) {
-    return `62${rawPhone.slice(1)}`;
-  }
-
-  if (rawPhone.startsWith("62")) {
-    return rawPhone;
-  }
-
-  if (rawPhone.startsWith("8")) {
-    return `62${rawPhone}`;
-  }
-
-  return rawPhone;
-}
-
 export default async function FreelancerPublicProfilePage({ params }: Props) {
   const authUser = await requireAuth(["client"]);
   const { id } = await params;
@@ -91,15 +69,10 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
     imagePublicId: portfolio.imagePublicId || null,
   }));
 
-  const whatsappNumber = formatWhatsappNumber(profile.phone);
-
+  const whatsappNumber = profile.phone?.replace(/\D/g, "");
   const whatsappMessage = encodeURIComponent(
     `Halo ${freelancer.name || "Freelancer"}, saya tertarik berdiskusi tentang project website.`
   );
-
-  const whatsappLink = whatsappNumber
-    ? `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${whatsappMessage}`
-    : "";
 
   return (
     <main className="min-h-screen bg-[#F5FBF8] font-sans text-slate-950">
@@ -145,7 +118,7 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
             <div className="mt-8 flex flex-wrap gap-3">
               {whatsappNumber ? (
                 <a
-                  href={whatsappLink}
+                  href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
                   target="_blank"
                   rel="noreferrer"
                   className="rounded-full bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-[0_12px_24px_rgba(16,185,129,0.24)] transition hover:bg-emerald-700"
@@ -365,7 +338,7 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
 
               {whatsappNumber && (
                 <a
-                  href={whatsappLink}
+                  href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex rounded-full bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
@@ -382,3 +355,5 @@ export default async function FreelancerPublicProfilePage({ params }: Props) {
     </main>
   );
 }
+
+//version 1.0.0
