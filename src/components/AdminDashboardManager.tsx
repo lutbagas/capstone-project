@@ -280,7 +280,7 @@ export default function AdminDashboardManager() {
         <nav className="mb-8 flex items-center justify-between rounded-[20px] border border-emerald-100 bg-white/85 px-8 py-3 shadow-[0_10px_30px_rgba(16,185,129,0.12)] backdrop-blur-md">
           <Link
             href="/"
-            className="font-serif text-[30px] font-bold tracking-tight text-emerald-700"
+            className="font-serif text-lg sm:text-3xl md:text-3xl lg:text-3xl font-bold tracking-tight text-emerald-700"
           >
             InfoWebLancers
           </Link>
@@ -288,7 +288,7 @@ export default function AdminDashboardManager() {
           <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="rounded-full border border-emerald-200 bg-white px-5 py-2.5 text-sm font-semibold text-emerald-700 transition hover:border-emerald-500 hover:bg-emerald-50"
+              className="rounded-full border border-emerald-200 bg-white ml-2 px-3 sm:px-5 md:px-5 lg:px-5 py-2.5 text-sm font-semibold text-emerald-700 transition hover:border-emerald-500 hover:bg-emerald-50"
             >
               Home
             </Link>
@@ -296,7 +296,7 @@ export default function AdminDashboardManager() {
             <button
               type="button"
               onClick={handleLogout}
-              className="rounded-full border border-red-200 bg-red-50 px-5 py-2.5 text-sm font-semibold text-red-600 transition hover:border-red-500 hover:bg-red-500 hover:text-white"
+              className="rounded-full border border-red-200 bg-red-50 px-3 sm:px-5 md:px-5 lg:px-5 py-2.5 text-sm font-semibold text-red-600 transition hover:border-red-500 hover:bg-red-500 hover:text-white"
             >
               Logout Admin
             </button>
@@ -309,7 +309,7 @@ export default function AdminDashboardManager() {
               Admin Dashboard
             </p>
 
-            <h1 className="font-serif text-[48px] font-bold leading-[1.05] tracking-[-2px] text-slate-950 md:text-[68px]">
+            <h1 className="font-serif text-4xl sm:text-4xl md:text-4xl lg:text-4xl font-bold leading-[1.05] tracking-[-2px] text-slate-950 md:text-[68px]">
               Kelola Akun Pengguna InfoWebLancers
             </h1>
 
@@ -320,17 +320,17 @@ export default function AdminDashboardManager() {
 
             <div className="mt-10 grid max-w-xl grid-cols-3 gap-3">
               <div className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
-                <h3 className="text-2xl font-bold text-slate-950">Admin</h3>
+                <h3 className="text-xl sm:text-2xl md:text-2xl lg:text-2xl font-bold text-slate-950">Admin</h3>
                 <p className="mt-1 text-xs text-slate-500">Mode akses</p>
               </div>
 
               <div className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
-                <h3 className="text-2xl font-bold text-slate-950">User</h3>
+                <h3 className="text-xl sm:text-2xl md:text-2xl lg:text-2xl font-bold text-slate-950">User</h3>
                 <p className="mt-1 text-xs text-slate-500">Cari email</p>
               </div>
 
               <div className="rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm">
-                <h3 className="text-2xl font-bold text-slate-950">Akun</h3>
+                <h3 className="text-xl sm:text-2xl md:text-2xl lg:text-2xl font-bold text-slate-950">Akun</h3>
                 <p className="mt-1 text-xs text-slate-500">Nama & password</p>
               </div>
             </div>
