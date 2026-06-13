@@ -25,13 +25,11 @@ export function middleware(req: NextRequest) {
   const isProtected =
     pathname === "/clients" ||
     pathname.startsWith("/clients/") ||
-    pathname.startsWith("/freelancers/");
+    pathname === "/freelancers" ||
+    pathname.startsWith("/freelancers/") ||
+    pathname.startsWith("/admin/");
 
   if (!isProtected) {
-    return;
-  }
-
-  if (pathname.startsWith("/freelancers/profile")) {
     return;
   }
 
@@ -43,5 +41,11 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/clients/:path*", "/freelancers/:path*", "/login", "/register"],
+  matcher: [
+    "/clients/:path*",
+    "/freelancers/:path*",
+    "/admin/:path*",
+    "/login",
+    "/register",
+  ],
 };
